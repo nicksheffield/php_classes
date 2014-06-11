@@ -52,6 +52,8 @@ class Database{
 
 	# This property remembers what the last query we tried was
 	public  $last_query = '';
+	# This property holds the id of the last inserted item
+	public  $last_insert_id = false;
 	# This property is our connection to the db
 	private $connection = null;
 
@@ -75,6 +77,8 @@ class Database{
 
 		# Send the query to the db, store the result
 		$result = $this->connection->query($q);
+
+		$this->last_insert_id = $this->connection->insert_id;
 
 		# If there was a query error
 		if($this->connection->error && $this->show_errors){
