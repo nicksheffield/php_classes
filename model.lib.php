@@ -73,10 +73,12 @@ class Model{
 
 	public function save(){
 		
-		if($this->fields['id'] == 0){
+		if(isset($this->fields['id'])){
 			$this->db
 				->set($this->fields)
 				->insert($this->table);
+
+			$this->fields['id'] = $this->db->last_insert_id;
 		}else{
 			$this->db
 				->set($this->fields)
