@@ -22,15 +22,15 @@
 
 class Hash{
 
-	public function encrypt($password, $salt){
+	public static function encrypt($password, $salt){
 		return hash('sha256', $salt.$password);
 	}
 
-	public function salt(){
+	public static function salt(){
 		return hash('sha256', time());
 	}
 
-	public function make_password($password){
+	public static function make_password($password){
 		return self::encrypt($password, self::salt());
 	}
 

@@ -14,7 +14,7 @@ session_start();
 
 class Login{
 
-	public function log_in($id = 0){
+	public static function log_in($id = 0){
 		self::create_user();
 
 		if($id != 0){
@@ -26,7 +26,7 @@ class Login{
 
 
 
-	public function log_out(){
+	public static function log_out(){
 		self::create_user();
 		$_SESSION['user']['id'] = 0;
 		$_SESSION['user']['logged_in'] = false;
@@ -34,7 +34,7 @@ class Login{
 
 
 
-	public function kickout(){
+	public static function kickout(){
 		self::create_user();
 		if($_SESSION['user']['logged_in'] == false){
 			header('location: login.php');
@@ -44,7 +44,7 @@ class Login{
 
 
 
-	public function is_logged_in(){
+	public static function is_logged_in(){
 		self::create_user();
 		return $_SESSION['user']['logged_in'];
 	}
