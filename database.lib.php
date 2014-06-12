@@ -176,6 +176,22 @@ class Database{
 		return $result[0];
 	}
 
+	# Get a list of all the fields in the specified table
+	public function get_fields($table){
+		$result = $this
+			->select('column_name')
+			->from('information_schema.columns')
+			->where('table_name', $table)
+			->order_by('ordinal_position')
+			->get();
+		
+		foreach($result as $key => $field){
+			$fields[] = $field['column_name'];
+		}
+
+		return $fields;
+	}
+
 	# Store items into the sets property.
 	# this method takes an array, and will merge any new data
 	# with any existing data
