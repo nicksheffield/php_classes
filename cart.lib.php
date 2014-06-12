@@ -30,9 +30,9 @@ class Cart{
 		self::create_cart();
 
 		if(isset($_SESSION['cart'][$id])){
-			$_SESSION['cart'][$id] += $qty;
+			$_SESSION['cart'][$id] += intval($qty);
 		}else{
-			$_SESSION['cart'][$id] = $qty;
+			$_SESSION['cart'][$id] = intval($qty);
 		}
 		
 	}
@@ -62,7 +62,7 @@ class Cart{
 	public static function set_quantity($id, $qty){
 		self::create_cart();
 
-		$_SESSION['cart'][$id] = $qty;
+		$_SESSION['cart'][$id] = intval($qty);
 	}
 
 
