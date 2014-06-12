@@ -22,11 +22,16 @@ class Cart{
 		$quantity   Int   quantity the user wants to order
 
 	*/
-	public static function add_product($id, $quantity){
+	public static function add_product($id, $qty){
 		self::create_cart();
-		$_SESSION['cart'][$id] = $quantity;
-	}
 
+		if(isset($_SESSION['cart'][$id])){
+			$_SESSION['cart'][$id] += $qty;
+		}else{
+			$_SESSION['cart'][$id] = $qty;
+		}
+		
+	}
 
 
 
@@ -37,20 +42,25 @@ class Cart{
 
 
 
-
-	public static function increase_quantity($id, $amount){
+	public static function set_quantity($id, $qty){
 		self::create_cart();
-		$_SESSION['cart'][$id] += $quantity;
+
+		$_SESSION['cart'][$id] = $qty;
 	}
 
 
 
-
-	public static function decrease_quantity($id, $amount){
+	public static function get_total(){
 		self::create_cart();
-		$_SESSION['cart'][$id] -= $quantity;
-	}
 
+		$amount = 0;
+
+		foreach($_SESSION['cart'] as $quantity){
+			$amount += $quantity;
+		}
+
+		return $amount;
+	}
 
 
 
@@ -58,7 +68,6 @@ class Cart{
 		self::create_cart();
 		return $_SESSION['cart'];
 	}
-
 
 
 
