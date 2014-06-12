@@ -5,7 +5,7 @@
 	Model class
 
 	usage   : Instantiated
-	version : 1
+	version : 1.1
 	author  : Nick Sheffield
 
 	=====================================
@@ -27,6 +27,7 @@ class Model{
 	# Properties -----------------------------------
 
 	private $fields      = array();
+	private $data        = array();
 	private $db          = null;
 	private $table       = '';
 
@@ -41,19 +42,21 @@ class Model{
 			Config::$password,
 			Config::$database
 		);
+
+		$this->fields = $this->db->get_fields($this->table);
 	}
 
 	function __get($var){
-		if(isset($this->fields[$var])){
-			return $this->fields[$var];
+		if(isset($this->data[$var])){
+			return $this->data[$var];
 		}else{
 			return false;
 		}
 	}
 
-	function __set($var, $val){
-		if(isset($this->fields[$var])){
-			$this->fields[$var] = $val;
+	function __SET($var, $val){
+		if(in_array($var, $this->fields)){
+			return $this->data[$var] = $val;
 		}else{
 			return false;
 		}
@@ -68,23 +71,26 @@ class Model{
 			->where('id', $id)
 			->get_one();
 
-		$this->fields = $result;
+		$this->data = $result;
 	}
 
 	public function save(){
 		
-		if(isset($this->fields['id'])){
+		if(!isset($this->data['id'])){
 			$this->db
-				->set($this->fields)
+				->set($this->data)
 				->insert($this->table);
 
-			$this->fields['id'] = $this->db->last_insert_id;
+			$this->data['id'] = $this->db->last_insert_id;
 		}else{
 			$this->db
-				->set($this->fields)
-				->where('id', $this->fields['id'])
+				->set($this->data)
+				->where('id', $this->data['id'])
 				->update($this->table);
 		}
+
+		echo $this->db->last_query;
+
 	}
 
 	public function delete(){
