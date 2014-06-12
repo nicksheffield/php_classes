@@ -1,27 +1,31 @@
 <?php
 
-/*
-	
-	Shopping cart class
-
-	usage   : Static
-	version : 1.1
-	author  : Nick Sheffield
-
+/**
+*	
+*	Shopping cart class.
+*	
+*	Used in static context.
+*
+*	@version 1.1
+*	@author Nick Sheffield
+*
 */
 
 session_start();
 
 class Cart{
 
-	/*
-
-		Add a product to the cart.
-
-		$id         Int   id of the product from the database
-		$quantity   Int   quantity the user wants to order
-
-	*/
+	/**
+	*
+	*	Add a product to the cart.
+	*
+	*	If the user adds a product that already exists in the cart,
+	*	then the quantity of that product is increased.
+	*
+	*	@param int $id  id of the product from the database
+	*	@param int $qty quantity the user wants to order
+	*
+	**/
 	public static function add_product($id, $qty){
 		self::create_cart();
 
@@ -34,14 +38,27 @@ class Cart{
 	}
 
 
-
+	/**
+	*
+	*	Remove a product from the cart
+	*
+	*	@param int $id The id of the product we want to remove
+	*
+	**/
 	public static function remove_product($id){
 		self::create_cart();
 		unset($_SESSION['cart'][$id]);
 	}
 
 
-
+	/**
+	*
+	*	Remove a product from the cart
+	*
+	*	@param int $id  The id of the product who's quantity we want to modify
+	*	@param int $qty The new quantity amount to set
+	*
+	**/
 	public static function set_quantity($id, $qty){
 		self::create_cart();
 
@@ -49,7 +66,13 @@ class Cart{
 	}
 
 
-
+	/**
+	*
+	*	Get the total quantity of all products in the cart
+	*
+	*	@return int $amount The total quantity
+	*
+	**/
 	public static function get_total(){
 		self::create_cart();
 
@@ -63,7 +86,11 @@ class Cart{
 	}
 
 
-
+	/**
+	*
+	*	Get the cart array
+	*
+	**/
 	public static function get_cart(){
 		self::create_cart();
 		return $_SESSION['cart'];
@@ -71,7 +98,11 @@ class Cart{
 
 
 
-	/* Create the cart array if it doesn't already exist */
+	/**
+	*
+	*	Create the cart array if it doesn't already exist
+	*
+	**/
 	private static function create_cart(){
 		if(!isset($_SESSION['cart'])){
 			$_SESSION['cart'] = array();
