@@ -98,7 +98,7 @@ class Form{
 	*	@used-by self::select() to get option tags
 	*	
 	*	@param  array  $values        An associative array including the value, and text of each option tag
-	*	@param  string $pre_selected  The value of the option element to show as selected
+	*	@param  string $pre_selected  The option tag to add the 'select' attribute to
 	*
 	*	@return string $html          The completed option tags
 	*	
