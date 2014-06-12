@@ -128,7 +128,7 @@ class Form{
 	*/
 	public static function select($name, $values, $pre_selected){
 		$html = "<select name='$name' id='$name'>";
-		$html .= self::options($values. $pre_selected);
+		$html .= self::options($values, $pre_selected);
 		$html .= '</select>';
 		return $html;
 	}
