@@ -5,7 +5,7 @@
 	Shopping cart class
 
 	usage   : Static
-	version : 1
+	version : 1.1
 	author  : Nick Sheffield
 
 */
