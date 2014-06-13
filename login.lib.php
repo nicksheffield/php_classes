@@ -1,13 +1,11 @@
 <?php
 
-/*
-	
-	Login handling class
-
-	usage   : Static
-	version : 1
-	author  : Nick Sheffield
-
+/**
+*	Login handling class
+*
+*	@version 1.1
+*	@author  Nick Sheffield
+*
 */
 
 session_start();
