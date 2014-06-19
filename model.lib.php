@@ -26,10 +26,10 @@ class Model{
 
 	# Properties -----------------------------------
 
-	private $fields      = array();
-	private $data        = array();
-	private $db          = null;
-	private $table       = '';
+	protected $fields      = array();
+	protected $data        = array();
+	protected $db          = null;
+	protected $table       = '';
 
 	# Magic Methods --------------------------------
 
