@@ -244,4 +244,22 @@ class Form{
 		$html = self::input('number', $name, $value, $extras);
 		return $html;
 	}
+
+	/**
+	*	Creates a email input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name   The name attribute
+	*	@param  string $value  The value attribute
+	*	@param  string $extras Any extra attributes to be added to the tag
+	*	
+	*	@return string $html   The completed email input tag
+	*	
+	*/
+	public static function email($name, $value = '', $extras = ''){
+		$html = self::input('email', $name, $value, $extras);
+		return $html;
+	}
+
 }
