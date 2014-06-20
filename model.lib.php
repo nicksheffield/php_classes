@@ -1,37 +1,24 @@
 <?php
 
-/*
-	
-	Model class
-
-	usage   : Instantiated
-	version : 1.1
-	author  : Nick Sheffield
-
-	=====================================
-
-	Example
-
-	$page = new Model('tb_pages');
-
-	$page->load(1);
-	$page->title = 'New title';
-	$page->save();
-
+/**
+*	
+*	General model class
+*
+*	@uses Config, for db details
+*
+*	@version 1.2
+*	@author  Nick Sheffield
+*
 */
 
-require_once 'config.class.php';
+require_once 'config.lib.php';
 
 class Model{
 
-	# Properties -----------------------------------
-
-	protected $fields      = array();
-	protected $data        = array();
-	protected $db          = null;
-	protected $table       = '';
-
-	# Magic Methods --------------------------------
+	protected $fields = array();
+	protected $data   = array();
+	protected $db     = null;
+	protected $table  = '';
 
 	function __construct($table){
 		$this->table = $table;
