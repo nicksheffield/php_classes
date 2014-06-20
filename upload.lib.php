@@ -18,7 +18,7 @@
 		foreach($upload_result as $file){
 			if($file['error_message']){
 				echo '<p class="error">'.$file['error_message'].'</p>';
-			}else{
+			}else if($file['filepath']){
 				echo '<a href="'.$file['filepath'].'">Download file</a>';
 			}
 		}
