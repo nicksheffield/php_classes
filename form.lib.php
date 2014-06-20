@@ -262,4 +262,21 @@ class Form{
 		return $html;
 	}
 
+	/**
+	*	Creates a url input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name   The name attribute
+	*	@param  string $value  The value attribute
+	*	@param  string $extras Any extra attributes to be added to the tag
+	*	
+	*	@return string $html   The completed url input tag
+	*	
+	*/
+	public static function url($name, $value = '', $extras = ''){
+		$html = self::input('url', $name, $value, $extras);
+		return $html;
+	}
+
 }
