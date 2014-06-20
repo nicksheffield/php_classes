@@ -31,7 +31,7 @@ A set of useful php libraries
 			$user = $this->db
 				->select('id, password, salt')
 				->from($this->table)
-				->where('username', $this->username)
+				->where('username', $this->data['username'])
 				->get_one();
 
 			$encrypted_pw = Hash::encrypt($this->data['password'], $user['salt']);
