@@ -51,7 +51,6 @@ class Collection{
 	*	This is used to narrow down results
 	*
 	*	@example only gather products from a specific category
-	*
 	*			 $products = new Collection('tb_products', 'cat_id', $_GET['cat_id']);
 	*
 	*	@param string $table The name of the table this collection represents
