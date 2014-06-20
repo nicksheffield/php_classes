@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 1.2
+*	@version 1.3
 *	@author  Nick Sheffield
 *
 */
