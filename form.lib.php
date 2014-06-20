@@ -64,6 +64,12 @@ class Form{
 		return $html;
 	}
 
+	/**
+	*
+	*	Make a string of html attributes out of an array
+	*
+	*
+	*/
 	public function make_extras($extras){
 		$html = '';
 		foreach($extras as $key => $val){
