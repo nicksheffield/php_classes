@@ -338,4 +338,26 @@ class Form{
 		return $html;
 	}
 
+	/**
+	*	Creates a range input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name     The name attribute
+	*	@param  string $value    The value attribute
+	*	@param  int    $min      The lowest end of the range
+	*	@param  int    $max      The highest end of the range
+	*	@param  int    $step     How much to increment or decrement
+	*	@param  string $extras   Any extra attributes to be added to the tag
+	*	
+	*	@return string  $html     The completed range input tag
+	*	
+	*/
+	public static function range($name, $value = '', $min = 0, $max = 100, $step = 1, $extras = ''){
+			
+		$extras .= $checked ? ' checked' : '';
+
+		$html = self::input('range', $name, $value, $extras);
+		return $html;
+	}
 }
