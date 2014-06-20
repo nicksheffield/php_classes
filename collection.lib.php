@@ -6,8 +6,8 @@
 *
 *	@uses Config, for db credentials. Database, for db connection
 *
-*	@author Nick Sheffield
 *	@version 1
+*	@author Nick Sheffield
 *
 */
 
