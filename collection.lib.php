@@ -41,9 +41,7 @@ class Collection{
 
 		$this->table = $table;
 
-		if($field && $value){
-			$this->load($field, $value);
-		}
+		$this->load($field, $value);
 	}
 
 	/**
