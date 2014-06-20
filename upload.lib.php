@@ -5,7 +5,7 @@
 	File Upload class
 
 	usage   : Static
-	version : 1
+	version : 1.1
 	author  : Nick Sheffield
 
 	=====================================
@@ -28,7 +28,7 @@
 
 class Upload{
 
-
+	public static $optional = false;
 
 	/*
 		Upload files into the specified folder.
@@ -103,7 +103,8 @@ class Upload{
 			return self::error('The file you are attempting to upload is incomplete');
 
 		}else if($error == 4){
-			return self::error('No file was uploaded');
+			if(self::$optional) return false;
+			else                return self::error('No file was uploaded');
 
 		}else{
 			return self::error('Unknown error');
