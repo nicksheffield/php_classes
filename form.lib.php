@@ -32,7 +32,7 @@ class Form{
 	*	@return string $html   The completed form tag
 	*	
 	*/
-	public static function open_multipart($action = ''){
+	public static function open_upload($action = ''){
 		$html = "<form action='$action' method='post' enctype='multipart/form-data'>";
 		return $html;
 	}
