@@ -317,4 +317,25 @@ class Form{
 		return $html;
 	}
 
+	/**
+	*	Creates a radio input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string  $name     The name attribute
+	*	@param  string  $value    The value attribute
+	*	@param  boolean $checked  Whether to check the box or not
+	*	@param  string  $extras   Any extra attributes to be added to the tag
+	*	
+	*	@return string  $html     The completed radio input tag
+	*	
+	*/
+	public static function radio($name, $value = '', $checked = false, $extras = ''){
+			
+		$extras .= $checked ? ' checked' : '';
+
+		$html = self::input('radio', $name, $value, $extras);
+		return $html;
+	}
+
 }
