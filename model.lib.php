@@ -65,20 +65,20 @@ class Model{
 
 	public function save(){
 		
-			$this->db
 		if(!isset($this->data[$this->primary_key])){
+			$success = $this->db
 				->set($this->data)
 				->insert($this->table);
 
 			$this->data[$this->primary_key] = $this->db->last_insert_id;
 		}else{
-			$this->db
+			$success = $this->db
 				->set($this->data)
 				->where($this->primary_key, $this->data[$this->primary_key])
 				->update($this->table);
 		}
 
-		echo $this->db->last_query;
+		return $success;
 
 	}
 
