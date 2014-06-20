@@ -16,11 +16,11 @@ require_once 'database.lib.php';
 
 class Model{
 
-	protected $fields = array();
-	protected $data   = array();
-	protected $db     = null;
-	protected $table  = '';
-
+	protected $fields      = array();
+	protected $data        = array();
+	protected $db          = null;
+	protected $primary_key = 'id';
+	protected $table       = '';
 	function __construct($table){
 		$this->table = $table;
 
@@ -56,7 +56,7 @@ class Model{
 		$result = $this->db
 			->select('*')
 			->from($this->table)
-			->where('id', $id)
+			->where($this->primary_key, $id)
 			->get_one();
 
 		$this->data = $result;
@@ -64,16 +64,16 @@ class Model{
 
 	public function save(){
 		
-		if(!isset($this->data['id'])){
 			$this->db
+		if(!isset($this->data[$this->primary_key])){
 				->set($this->data)
 				->insert($this->table);
 
-			$this->data['id'] = $this->db->last_insert_id;
+			$this->data[$this->primary_key] = $this->db->last_insert_id;
 		}else{
 			$this->db
 				->set($this->data)
-				->where('id', $this->data['id'])
+				->where($this->primary_key, $this->data[$this->primary_key])
 				->update($this->table);
 		}
 
@@ -92,7 +92,7 @@ class Model{
 
 	public function hard_delete(){
 		$this->db
-			->where('id', $this->fields['id'])
+			->where($this->primary_key, $this->fields[$this->primary_key])
 			->delete();
 	}
 
