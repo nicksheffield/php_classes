@@ -16,8 +16,8 @@ A set of useful php libraries
 ```php
 <?php
 
-	require_once '../model.lib.php';
-	require_once '../hash.lib.php';
+	require_once '../model.lib.php'; # You need this always
+	require_once '../hash.lib.php';  # This is just for the example
 
 	class User extends Model{
 		protected $table = 'tb_users';
