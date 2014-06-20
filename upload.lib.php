@@ -1,29 +1,28 @@
 <?php
 
-/*
-	
-	File Upload class
-
-	usage   : Static
-	version : 1.1
-	author  : Nick Sheffield
-
-	=====================================
-
-	Example
-
-	if($_FILES){
-		$upload_result = Upload::to_folder('uploads/');
-
-		foreach($upload_result as $file){
-			if($file['error_message']){
-				echo '<p class="error">'.$file['error_message'].'</p>';
-			}else if($file['filepath']){
-				echo '<a href="'.$file['filepath'].'">Download file</a>';
-			}
-		}
-	}
-
+/**
+*	
+*	File Upload class
+*
+*	@version 1.1
+*	@author  Nick Sheffield
+*
+*	@todo    Finish docblocks
+*
+*	@example
+*
+*	if($_FILES){
+*		$upload_result = Upload::to_folder('uploads/');
+*
+*		foreach($upload_result as $file){
+*			if($file['error_message']){
+*				echo '<p class="error">'.$file['error_message'].'</p>';
+*			}else if($file['filepath']){
+*				echo '<a href="'.$file['filepath'].'">Download file</a>';
+*			}
+*		}
+*	}
+*
 */
 
 class Upload{
