@@ -83,16 +83,16 @@ class Model{
 	}
 
 	public function delete(){
-		$this->soft_delete();
+		return $this->soft_delete();
 	}
 
 	public function soft_delete(){
 		$this->fields['deleted'] = 1;
-		$this->save();
+		return $this->save();
 	}
 
 	public function hard_delete(){
-		$this->db
+		return $this->db
 			->where($this->primary_key, $this->fields[$this->primary_key])
 			->delete();
 	}
