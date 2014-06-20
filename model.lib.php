@@ -44,7 +44,8 @@ class Model{
 
 	function __set($var, $val){
 		if(in_array($var, $this->fields)){
-			return $this->data[$var] = $val;
+			$this->data[$var] = $val;
+			return true;
 		}else{
 			return false;
 		}
