@@ -21,6 +21,16 @@ class Model{
 	protected $db          = null;
 	protected $primary_key = 'id';
 	protected $table       = '';
+
+	/**
+	*
+	*	This method is called automatically when this class is constructed.
+	*
+	*	@param  string $table The table that this model is supposed to represent
+	*
+	*	@return $this
+	*
+	*/
 	function __construct($table){
 		$this->table = $table;
 
@@ -34,6 +44,21 @@ class Model{
 		$this->fields = $this->db->get_fields($this->table);
 	}
 
+
+	/**
+	*
+	*	This method automatically triggers whenever we try to get a property
+	*	from this object.
+	*
+	*	Instead of actually getting a property from this object, it instead pulls
+	*	it from the data property, which is an array.
+	*
+	*	@param  string $var The property being requested
+	*
+	*	@return mixed  The value of the property being requested, or false if the
+	*				   property doesn't exist
+	*
+	*/
 	function __get($var){
 		if(isset($this->data[$var])){
 			return $this->data[$var];
@@ -42,6 +67,24 @@ class Model{
 		}
 	}
 
+	/**
+	*
+	*	This method automatically triggers whenever we try to set a property
+	*	from this object.
+	*
+	*	Instead of actually setting a property on this object, it instead modifies
+	*	or adds the value in the data property, which is an array.
+	*
+	*	It only works if the key ($var) exists in the fields property, which is an
+	*	array of all the possible fields in this database table. If that property
+	*	didn't exist, it just returns false, thus, failing silently.
+	*
+	*	@param  string  $var The name of the property being changed
+	*	@param  string  $val The value of the property being changed
+	*
+	*	@return boolean Whether the property existed or not.
+	*
+	*/
 	function __set($var, $val){
 		if(in_array($var, $this->fields)){
 			$this->data[$var] = $val;
@@ -51,8 +94,15 @@ class Model{
 		}
 	}
 
-	# Normal Methods --------------------------------
-
+	/**
+	*
+	*	Load information from the database table
+	*
+	*	@param  int   $id The value of the id field in the table
+	*
+	*	@return array An assoc array of the fields and values that were loaded
+	*
+	*/
 	public function load($id){
 		$result = $this->db
 			->select('*')
@@ -61,8 +111,16 @@ class Model{
 			->get_one();
 
 		$this->data = $result;
+		return $result;
 	}
 
+	/**
+	*
+	*	Insert or update this record in the table
+	*
+	*	@return boolean Whether the insert/update was successful or not
+	*
+	*/
 	public function save(){
 		
 		if(!isset($this->data[$this->primary_key])){
@@ -82,14 +140,42 @@ class Model{
 
 	}
 
+	/**
+	*
+	*	Delete this record from the table. This is a soft delete
+	*
+	*	@return boolean Whether the delete was successful
+	*
+	*/
 	public function delete(){
 		return $this->soft_delete();
 	}
+
+	/**
+	*
+	*	Specifically perform a soft delete.
+	*
+	*	This only sets the 'deleted' field of this record to 1
+	*
+	*	@return boolean Whether the delete was successful
+	*
+	*/
 
 	public function soft_delete(){
 		$this->fields['deleted'] = 1;
 		return $this->save();
 	}
+
+	/**
+	*
+	*	Specifically perform a hard delete.
+	*
+	*	This is different to a soft delete because the record will
+	*	be permanently removed from the db.
+	*
+	*	@return boolean Whether the delete was successful
+	*
+	*/
 
 	public function hard_delete(){
 		return $this->db
