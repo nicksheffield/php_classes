@@ -3,7 +3,7 @@
 /**
 *	Form creation class
 *
-*	@version 1.1
+*	@version 1.2
 *	@author  Nick Sheffield
 *
 */
@@ -242,6 +242,122 @@ class Form{
 	*/
 	public static function number($name, $value = '', $extras = ''){
 		$html = self::input('number', $name, $value, $extras);
+		return $html;
+	}
+
+	/**
+	*	Creates a email input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name   The name attribute
+	*	@param  string $value  The value attribute
+	*	@param  string $extras Any extra attributes to be added to the tag
+	*	
+	*	@return string $html   The completed email input tag
+	*	
+	*/
+	public static function email($name, $value = '', $extras = ''){
+		$html = self::input('email', $name, $value, $extras);
+		return $html;
+	}
+
+	/**
+	*	Creates a url input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name   The name attribute
+	*	@param  string $value  The value attribute
+	*	@param  string $extras Any extra attributes to be added to the tag
+	*	
+	*	@return string $html   The completed url input tag
+	*	
+	*/
+	public static function url($name, $value = '', $extras = ''){
+		$html = self::input('url', $name, $value, $extras);
+		return $html;
+	}
+
+	/**
+	*	Creates a date input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name   The name attribute
+	*	@param  string $value  The value attribute
+	*	@param  string $extras Any extra attributes to be added to the tag
+	*	
+	*	@return string $html   The completed date input tag
+	*	
+	*/
+	public static function date($name, $value = '', $extras = ''){
+		$html = self::input('date', $name, $value, $extras);
+		return $html;
+	}
+
+	/**
+	*	Creates a checkbox input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string  $name     The name attribute
+	*	@param  string  $value    The value attribute
+	*	@param  boolean $checked  Whether to check the box or not
+	*	@param  string  $extras   Any extra attributes to be added to the tag
+	*	
+	*	@return string  $html     The completed checkbox input tag
+	*	
+	*/
+	public static function checkbox($name, $value = '', $checked = false, $extras = ''){
+			
+		$extras .= $checked ? ' checked' : '';
+
+		$html = self::input('checkbox', $name, $value, $extras);
+		return $html;
+	}
+
+	/**
+	*	Creates a radio input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string  $name     The name attribute
+	*	@param  string  $value    The value attribute
+	*	@param  boolean $checked  Whether to check the box or not
+	*	@param  string  $extras   Any extra attributes to be added to the tag
+	*	
+	*	@return string  $html     The completed radio input tag
+	*	
+	*/
+	public static function radio($name, $value = '', $checked = false, $extras = ''){
+			
+		$extras .= $checked ? ' checked' : '';
+
+		$html = self::input('radio', $name, $value, $extras);
+		return $html;
+	}
+
+	/**
+	*	Creates a range input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name     The name attribute
+	*	@param  string $value    The value attribute
+	*	@param  int    $min      The lowest end of the range
+	*	@param  int    $max      The highest end of the range
+	*	@param  int    $step     How much to increment or decrement
+	*	@param  string $extras   Any extra attributes to be added to the tag
+	*	
+	*	@return string  $html     The completed range input tag
+	*	
+	*/
+	public static function range($name, $value = '', $min = 0, $max = 100, $step = 1, $extras = ''){
+			
+		$extras .= $checked ? ' checked' : '';
+
+		$html = self::input('range', $name, $value, $extras);
 		return $html;
 	}
 }
