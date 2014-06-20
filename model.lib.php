@@ -4,7 +4,7 @@
 *	
 *	General model class
 *
-*	@uses Config, for db details
+*	@uses Config, for db details. Database, for db connection
 *
 *	@version 1.2
 *	@author  Nick Sheffield
@@ -12,6 +12,7 @@
 */
 
 require_once 'config.lib.php';
+require_once 'database.lib.php';
 
 class Model{
 
