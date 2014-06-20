@@ -296,4 +296,25 @@ class Form{
 		return $html;
 	}
 
+	/**
+	*	Creates a checkbox input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string  $name     The name attribute
+	*	@param  string  $value    The value attribute
+	*	@param  boolean $checked  Whether to check the box or not
+	*	@param  string  $extras   Any extra attributes to be added to the tag
+	*	
+	*	@return string  $html     The completed checkbox input tag
+	*	
+	*/
+	public static function checkbox($name, $value = '', $checked = false, $extras = ''){
+			
+		$extras .= $checked ? ' checked' : '';
+
+		$html = self::input('checkbox', $name, $value, $extras);
+		return $html;
+	}
+
 }
