@@ -44,8 +44,7 @@ class Form{
 	*	
 	*/
 	public static function close(){
-		$html = '</form>';
-		return $html;
+		return '</form>';
 	}
 
 	/**
