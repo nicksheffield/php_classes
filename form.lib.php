@@ -63,6 +63,14 @@ class Form{
 		return $html;
 	}
 
+	public function make_extras($extras){
+		$html = '';
+		foreach($extras as $key => $val){
+			$html .= " $key='$val' ";
+		}
+		return $html;
+	}
+
 	/**
 	*	Creates a label tag
 	*	
