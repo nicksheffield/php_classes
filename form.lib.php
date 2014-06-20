@@ -279,4 +279,21 @@ class Form{
 		return $html;
 	}
 
+	/**
+	*	Creates a date input tag
+	*	
+	*	@uses   self::input() to create the tag
+	*
+	*	@param  string $name   The name attribute
+	*	@param  string $value  The value attribute
+	*	@param  string $extras Any extra attributes to be added to the tag
+	*	
+	*	@return string $html   The completed date input tag
+	*	
+	*/
+	public static function date($name, $value = '', $extras = ''){
+		$html = self::input('date', $name, $value, $extras);
+		return $html;
+	}
+
 }
