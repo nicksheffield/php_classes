@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 1.3
+*	@version 1.4
 *	@author  Nick Sheffield
 *
 */
@@ -161,7 +161,7 @@ class Model{
 	*/
 
 	public function soft_delete(){
-		$this->fields['deleted'] = 1;
+		$this->data['deleted'] = 1;
 		return $this->save();
 	}
 
