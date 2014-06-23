@@ -55,8 +55,7 @@ class Model{
 	*
 	*	@param  string $var The property being requested
 	*
-	*	@return mixed  The value of the property being requested, or false if the
-	*				   property doesn't exist
+	*	@return mixed  The value of the property being requested, or false if the property doesn't exist
 	*
 	*/
 	function __get($var){
