@@ -23,7 +23,7 @@
 class Hash{
 
 	public static function encrypt($password, $salt){
-		return hash('sha256', substr($salt.$password, 300));
+		return hash('sha256', substr($salt.$password, 0, 300));
 	}
 
 	public static function salt(){
