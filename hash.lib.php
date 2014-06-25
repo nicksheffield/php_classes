@@ -2,9 +2,14 @@
 
 /**
 *	
-*	Password hashing class
+*	Password hashing class.
 *
-*	@uses phpass http://www.openwall.com/phpass/
+*	Have changed it into basically a static interface for PhPass as it is much more
+*	reliable than my own uneducated methods of password encryption
+*	
+*	PhPass is linked below
+*
+*	@uses PhPass http://www.openwall.com/phpass/
 *
 *	@version 3
 *	@author  Nick Sheffield
@@ -16,10 +21,11 @@ class Hash{
 	/**
 	*
 	*	Create a full password hash.
+	*	Hash::make() is an alias for $phpass->HashPassword()
 	*
 	*	@param string $password The password to use to create the hash
 	*
-	*	@return string The full hash. The first 13 characters of this is salt, the rest is the encrypted password
+	*	@return string The full hash. This is a different hash every time it's used, even with the same password.
 	*
 	*/
 	public static function make($password){
@@ -31,6 +37,7 @@ class Hash{
 	/**
 	*
 	*	Check if a given password was used to create a given hash
+	*	Hash::check() is an alias for $phpass->CheckPassword()
 	*
 	*	@param string $password The password in question
 	*	@param string $hash     The hash we already know
@@ -45,6 +52,18 @@ class Hash{
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 #
 # Portable PHP password hashing framework.
