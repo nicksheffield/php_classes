@@ -60,7 +60,7 @@ class Hash{
 	*	@return boolean Whether the password was indeed used to create the hash
 	*
 	*/
-	public static function verify($password, $hash){
+	public static function check($password, $hash){
 		$extracted_salt = substr($hash, 0, 16);
 
 		$matches = $hash == $extracted_salt . self::encrypt($password, $extracted_salt);
