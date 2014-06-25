@@ -7,7 +7,7 @@
 *	Have changed it into basically a static interface for PhPass as it is much more
 *	reliable than my own uneducated methods of password encryption
 *	
-*	PhPass is linked below
+*	The PhPass class definition is included in this file for ease.
 *
 *	@uses PhPass http://www.openwall.com/phpass/
 *
