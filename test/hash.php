@@ -39,12 +39,12 @@ $pw = '123';
 
 		<tr>
 			<td>Check 123</td>
-			<td><?=Hash::verify($pw, Hash::make($pw)) ? 'true' : 'false';?></td>
+			<td><?=Hash::check($pw, Hash::make($pw)) ? 'true' : 'false';?></td>
 		</tr>
 
 		<tr>
 			<td>Check 1234</td>
-			<td><?=Hash::verify('1234', Hash::make($pw)) ? 'true' : 'false';?></td>
+			<td><?=Hash::check('1234', Hash::make($pw)) ? 'true' : 'false';?></td>
 		</tr>
 		
 	</table>
