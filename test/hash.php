@@ -2,7 +2,7 @@
 
 require_once '../hash.lib.php';
 
-$pw = 'aaabbbccc';
+$pw = '123';
 
 ?>
 
