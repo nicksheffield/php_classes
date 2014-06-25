@@ -6,7 +6,7 @@
 *	
 *	Used in static context.
 *
-*	@version 1.1
+*	@version 1.2
 *	@author Nick Sheffield
 *
 */
