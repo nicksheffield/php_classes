@@ -20,7 +20,7 @@ class Hash{
 	*
 	*/
 	public static function salt(){
-		return substr(hash('sha256', time()), 0, 13);
+		return substr(hash('sha256', time()), 0, 16);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Hash{
 	*
 	*/
 	public static function verify($password, $hash){
-		$extracted_salt = substr($hash, 0, 13);
+		$extracted_salt = substr($hash, 0, 16);
 
 		$matches = $hash == $extracted_salt . self::encrypt($password, $extracted_salt);
 
