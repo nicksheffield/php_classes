@@ -97,6 +97,16 @@ class Cart{
 	}
 
 
+	/**
+	*
+	*	Clear the cart
+	*
+	**/
+	public static function clear_cart(){
+		$_SESSION['cart'] = array();
+	}
+
+
 
 	/**
 	*
