@@ -2,11 +2,11 @@
 
 class Email{
 
-	public $to = '';
-	public $from = '';
+	public $to      = '';
+	public $from    = '';
 	public $subject = '';
 	public $message = '';
-	public $html = true;
+	public $html    = true;
 	public $success = false;
 
 	public function send(){
