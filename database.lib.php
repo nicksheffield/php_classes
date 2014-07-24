@@ -47,6 +47,8 @@ class Database{
 	private $where = '';
 	private $where_and = '';
 	private $where_or = '';
+	private $where_like = '';
+	private $limit = '';
 	private $sets = array();
 	private $show_errors = false;
 
@@ -232,6 +234,14 @@ class Database{
 	public function update($table){
 		$q  = "UPDATE $table ";
 		$q .= $this->make_set();
+		$q .= $this->where;
+
+		return $this->query($q);
+	}
+
+	# Assemble a DELETE query and send it to the db
+	public function delete($table){
+		$q  = "DELETE FROM $table";
 		$q .= $this->where;
 
 		return $this->query($q);
