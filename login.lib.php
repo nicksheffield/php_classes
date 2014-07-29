@@ -42,6 +42,13 @@ class Login{
 
 
 
+	public static function user_id(){
+		self::create_user();
+		return $_SESSION['user']['id'];
+	}
+
+
+
 	public static function is_logged_in(){
 		self::create_user();
 		return $_SESSION['user']['logged_in'];
