@@ -30,14 +30,12 @@ A set of useful php libraries
 		# Put your own custom methods for this model here
 		public function authenticate(){
 			$user = $this->db
-				->select('id, password, salt')
+				->select('id, password')
 				->from($this->table)
 				->where('username', $this->data['username'])
 				->get_one();
 
-			$encrypted_pw = Hash::encrypt($this->data['password'], $user['salt']);
-
-			if($user['password'] == $encrypted_pw){
+			if(Hash::check($this->data['password'],$user['password'])){
 				$this->load($user['id']);
 				return true;
 			}else{
