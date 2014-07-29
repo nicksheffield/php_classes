@@ -8,7 +8,7 @@ $user = $db
 	->select('*')
 	->from('tb_users')
 	->where('id', 2)
-	->where_or('email', 'user@example.com')
+	->where_or(array('email' => 'user@example.com'))
 	->get_one();
 
 echo $db->last_query;

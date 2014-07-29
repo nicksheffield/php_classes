@@ -21,23 +21,15 @@ class Database{
 
 
 
+	public function __construct($hostname, $username, $password, $database){
 
-
-
-
-	public function __construct($h, $u, $p, $d){
-
-		$this->connection = new mysqli($h, $u, $p, $d);
+		$this->connection = new mysqli($hostname, $username, $password, $database);
 
 		if($this->connection->errno){
-			echo 'There was an error connecting to the database. <br>';
-			echo $this->connection->error;
+			$this->report_error('There was an error connecting to the database. <br>'.$this->connection->error, true);
 		}
 	}
-
-
-
-
+	
 
 
 
@@ -47,53 +39,44 @@ class Database{
 
 		return $this;
 	}
+	
 
 
 
 
+	public function where($param1, $param2 = null, $param3 = null, $param4 = null){
 
-
-
-
-	public function where($data, $value = null){
-
-		if($value === null){
-			$this->make_where($data);
+		if(is_array($param1)){
+			$data       = $param1;
+			$use_quotes = is_null($param2) ? true : $param2;
+			$or         = is_null($param3) ? false : $param3;
 		}else{
-			$this->make_where(array($data => $value));
+			$data       = array($param1 => $param2);
+			$use_quotes = is_null($param3) ? true : $param3;
+			$or         = is_null($param4) ? false : $param4;
 		}
+
+		$this->make_where($data, $use_quotes, $or);
 
 		return $this;
 	}
+	
 
 
 
 
-
-
-	public function where_or($data, $value = null){
-		if($value === null){
-			$this->make_where($data, true, true);
-		}else{
-			$this->make_where(array($data => $value), true, true);
-		}
-
-		return $this;
+	public function where_or($data, $value = null, $use_quotes = true){
+		return $this->where($data, $value, $use_quotes, true);
 	}
+	
 
 
 
 
-
-
-	public function where_and($data, $value = null){
-		return $this->where($data, $value);
+	public function where_and($param1, $param2 = null, $param3 = null, $param4 = null){
+		return $this->where($param1, $param2, $param3, $param4);
 	}
-
-
-
-
-
+	
 
 
 
@@ -113,10 +96,7 @@ class Database{
 
 		return $this;
 	}
-
-
-
-
+	
 
 
 
@@ -126,10 +106,7 @@ class Database{
 
 		return $this;
 	}
-
-
-
-
+	
 
 
 
@@ -143,7 +120,7 @@ class Database{
 
 		return $this;
 	}
-
+	
 
 
 
@@ -153,10 +130,7 @@ class Database{
 
 		return $this;
 	}
-
-
-
-
+	
 
 
 
@@ -172,20 +146,33 @@ class Database{
 
 		return $this->assoc($this->run($q));
 	}
+	
+
+
 
 
 	public function get_one(){
 		$result = $this->get(true);
 		return $result[0];
 	}
+	
+
+
+
 
 	public function get_field($field){
 		$result = $this->get_one();
 		return $result[$field];
 	}
+	
 
 
 
+
+	public function get_fields($table){
+		return $this->get_columns($table);
+	}
+	
 
 
 
@@ -200,10 +187,7 @@ class Database{
 
 		return $fields;
 	}
-
-
-
-
+	
 
 
 
@@ -219,10 +203,7 @@ class Database{
 
 		return $this;
 	}
-
-
-
-
+	
 
 
 
@@ -247,10 +228,7 @@ class Database{
 
 		return $success;
 	}
-
-
-
-
+	
 
 
 
@@ -283,9 +261,7 @@ class Database{
 
 		return $success;
 	}
-
-
-
+	
 
 
 
@@ -311,10 +287,7 @@ class Database{
 
 		return $this;
 	}
-
-
-
-
+	
 
 
 
@@ -329,10 +302,7 @@ class Database{
 
 		return substr($set, 0, -2);
 	}
-
-
-
-
+	
 
 
 
@@ -361,6 +331,8 @@ class Database{
 
 		return $this->where;
 	}
+	
+
 
 
 
@@ -372,6 +344,9 @@ class Database{
 		$this->limit  = '';
 		$this->sets   = array();
 	}
+	
+
+
 
 
 	private function assoc($result){
@@ -380,10 +355,7 @@ class Database{
 		}
 		return $rows;
 	}
-
-
-
-
+	
 
 
 
@@ -397,6 +369,8 @@ class Database{
 
 		return $result;
 	}
+	
+
 
 
 
@@ -406,6 +380,9 @@ class Database{
 			if($exit) exit;
 		}
 	}
+	
+
+
 
 
 	private function report_error($error, $exit = false){
