@@ -323,6 +323,7 @@ class Database{
 		$set = ' SET ';
 
 		foreach($data as $field => $val){
+			$val = $this->connection->real_escape_string($val);
 			$set .= $field.' = "'.$val.'", ';
 		}
 
