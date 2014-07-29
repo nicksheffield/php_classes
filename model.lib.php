@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 1.4
+*	@version 1.5
 *	@author  Nick Sheffield
 *
 */
@@ -111,6 +111,26 @@ class Model{
 
 		$this->data = $result;
 		return $result;
+	}
+
+	/**
+	*
+	*	Fill the data array of this model. Useful for adding data from $_POST quickly
+	*
+	*	@param  array $data An associative array containing one or more fields => value pairs
+	*
+	*	@return array The data that was provided
+	*
+	*/
+	public function fill($data){
+
+		if(is_array($this->data)){
+			$this->data = array_merge($this->data, $data);
+		}else{
+			$this->data = $data;
+		}
+
+		return $data;
 	}
 
 	/**
