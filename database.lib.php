@@ -352,9 +352,12 @@ class Database{
 
 
 	private function assoc($result){
+		$rows = array();
+
 		while($row = $result->fetch_array(MYSQLI_ASSOC)){
 			$rows[] = $row;
 		}
+		
 		return $rows;
 	}
 	
