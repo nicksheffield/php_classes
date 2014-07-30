@@ -113,6 +113,17 @@ class Model{
 		return $result;
 	}
 
+	public function fill($data){
+
+		foreach($data as $key => $value){
+			if(in_array($key, $this->fields)){
+				$this->data[$key] = $value;
+			}
+		}
+
+		return $this->data;
+	}
+
 	/**
 	*
 	*	Fill the data array of this model. Useful for adding data from $_POST quickly

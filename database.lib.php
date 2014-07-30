@@ -1,260 +1,397 @@
 <?php
 
-/*
-	
-	Query builder class
-
-	usage   : Instantiated
-	version : 1
-	author  : Nick Sheffield
-
-	=====================================
-
-	Example
-
-		$db = new Database('localhost', 'username', 'password', 'dbname');
-
-	Select
-
-		$users = $db->select('*')
-				   ->from('tb_users')
-				   ->get();
-
-	Update
-
-		$db->set(array(
-				'email' => 'newemail@gmail.com'
-			))
-		   ->where('id', 1)
-		   ->update('tb_users');
-
-	Insert
-
-		$db->set(array(
-		   		'email' => 'user@example.com',
-		   		'password' => '123'
-		   	))
-		   ->insert('tb_users');
-
-*/
-
 class Database{
 
-	# Each of these properties stores a part of a query
-	private $select = '';
-	private $from = '';
-	private $order_by = '';
-	private $where = '';
-	private $where_and = '';
-	private $where_or = '';
-	private $where_like = '';
-	private $limit = '';
+	
+	private $debug = true;
+	private $select;
+	private $where;
+	private $from;
+	private $order;
+	private $limit;
+
+	public $last_query;
+	public $last_insert_id;
+	public $num_updated_rows;
+
 	private $sets = array();
-	private $show_errors = false;
-
-	# This property remembers what the last query we tried was
-	public  $last_query = '';
-	# This property holds the id of the last inserted item
-	public  $last_insert_id = false;
-	# This property is our connection to the db
 	private $connection = null;
+	
 
-	public function __construct($h, $u, $p, $d){
-		# Hostname, Username, Password, Database
-		$this->connection = new mysqli($h, $u, $p, $d);
 
-		# If there was an error connecting to the db
-		if($this->connection->connect_error){
-			# echo the error
-			echo '<b>Connection Error:</b> '.$this->connection->connect_error;
-			# and quit the php code
-			exit;
+
+
+	public function __construct($hostname, $username, $password, $database){
+
+		$this->connection = new mysqli($hostname, $username, $password, $database);
+
+		if($this->connection->errno){
+			$this->report_error('There was an error connecting to the database. <br>'.$this->connection->error, true);
 		}
 	}
+	
 
-	# Send a query to the database
-	public function query($q){
-		# Store the query in the last_query property
-		$this->last_query = $q;
 
-		# Send the query to the db, store the result
-		$result = $this->connection->query($q);
 
-		$this->last_insert_id = $this->connection->insert_id;
 
-		# If there was a query error
-		if($this->connection->error && $this->show_errors){
-			# Echo it
-			echo '<b>Query Error:</b> '.$this->connection->error;
-			echo '<br>'.$q;
-
-			return false;
-		}
-
-		# Reset all the query parts to blank
-		$this->select = '';
-		$this->from = '';
-		$this->where = '';
-		$this->where_and = '';
-		$this->where_or = '';
-		$this->order_by = '';
-		$this->sets = array();
-
-		# Output the result of the query
-		return $result;
-	}
-
-	# Write the SELECT statement
 	public function select($fields){
-		$filtered_fields = $this->connection->real_escape_string($fields);
-		$this->select = "SELECT $filtered_fields ";
+		$this->select = "SELECT $fields ";
 
 		return $this;
 	}
+	
 
-	# Write the FROM statement
+
+
+
+	public function where($param1, $param2 = null, $param3 = null, $param4 = null){
+
+		if(is_array($param1)){
+			$data       = $param1;
+			$use_quotes = is_null($param2) ? true : $param2;
+			$or         = is_null($param3) ? false : $param3;
+		}else{
+			$data       = array($param1 => $param2);
+			$use_quotes = is_null($param3) ? true : $param3;
+			$or         = is_null($param4) ? false : $param4;
+		}
+
+		$this->make_where($data, $use_quotes, $or);
+
+		return $this;
+	}
+	
+
+
+
+
+	public function where_or($data, $value = null, $use_quotes = true){
+		return $this->where($data, $value, $use_quotes, true);
+	}
+	
+
+
+
+
+	public function where_and($param1, $param2 = null, $param3 = null, $param4 = null){
+		return $this->where($param1, $param2, $param3, $param4);
+	}
+	
+
+
+
+
+	public function order_by($data, $dir = null){
+		$order = ' ORDER BY ';
+
+		if(is_array($data)){
+			foreach($data as $field){
+				$order .= $field.', ';
+			}
+
+			$this->order = substr($order, 0, -2);
+		}else{
+			$this->order .= $order.$data.' '.$dir;
+		}
+
+		return $this;
+	}
+	
+
+
+
+
 	public function from($table){
-		$filtered_table = $this->connection->real_escape_string($table);
-		$this->from = " FROM $filtered_table ";
+		$this->from = ' FROM '.$table;
 
 		return $this;
 	}
+	
 
-	# Write the ORDER BY Statement.
-	# $dir is an optional parameter, defaults to ASC
-	public function order_by($field, $dir = 'ASC'){
-		$filtered_field = $this->connection->real_escape_string($field);
-		$this->order_by = " ORDER BY $filtered_field $dir ";
 
-		return $this;
-	}
 
-	# Write a simple WHERE statement
-	public function where($field, $value){
-		$filtered_field = $this->connection->real_escape_string($field);
-		$this->where = " WHERE $filtered_field = '$value' ";
+
+	public function join($join){
+		if(!strpos($this->where, 'WHERE')){
+			$this->where .= ' WHERE '.$join.' ';
+		}else{
+			$this->where .= ' AND '.$join.' ';
+		}
 
 		return $this;
 	}
+	
 
-	# Write a simple AND statement
-	public function where_and($field, $value){
-		$filtered_value = $this->connection->real_escape_string($value);
-		$this->where_and .= " AND $field = '$filtered_value' ";
 
-		return $this;
-	}
 
-	# Write a simple OR statement
-	public function where_or($field, $value){
-		$filtered_value = $this->connection->real_escape_string($value);
-		$this->where_or .= " OR $field = '$filtered_value' ";
+
+	public function limit($from, $count){
+		$this->limit = " LIMIT $from, $count ";
 
 		return $this;
 	}
+	
 
-	public function get_result(){
+
+
+
+	public function get(){
 		$q  = $this->select;
 		$q .= $this->from;
 		$q .= $this->where;
-		$q .= $this->where_and;
-		$q .= $this->where_or;
-		$q .= $this->order_by;
+		$q .= $this->order;
+		$q .= $this->limit;
 
-		return $this->query($q);
+		$this->reset();
+
+		return $this->assoc($this->run($q));
 	}
+	
 
-	# Join all the query parts together, and send it to the db
-	public function get(){
-		$result = $this->get_result();
 
-		# Change the query result into a usable array
-		return $this->assoc($result);
-	}
+
 
 	public function get_one(){
-		$result = $this->get();
-
+		$result = $this->get(true);
 		return $result[0];
 	}
+	
 
-	# Get a list of all the fields in the specified table
+
+
+
+	public function get_field($field){
+		$result = $this->get_one();
+		return $result[$field];
+	}
+	
+
+
+
+
 	public function get_fields($table){
-		$result = $this
-			->select('column_name')
-			->from('information_schema.columns')
-			->where('table_name', $table)
-			->order_by('ordinal_position')
-			->get();
-		
+		return $this->get_columns($table);
+	}
+	
+
+
+
+
+	public function get_columns($table){
+		$field_query = 'SELECT column_name FROM information_schema.columns WHERE table_name = "'.$table.'" ORDER BY ordinal_position';
+		$result = $this->assoc($this->connection->query($field_query));
+
 		foreach($result as $key => $field){
 			$fields[] = $field['column_name'];
 		}
 
 		return $fields;
 	}
+	
 
-	# Store items into the sets property.
-	# this method takes an array, and will merge any new data
-	# with any existing data
-	public function set($data){
-		# If there are any items in sets already
-		if(count($this->sets)){
-			# merge the arrays
-			$this->sets = array_merge($this->sets, $data);
+
+
+
+	public function set($data, $value = null){
+		if(is_array($data)){
+			$this->sets = array_merge($data, $this->sets);
 		}else{
-			$this->sets = $data;
+			if($value != null){
+				$this->sets[$data] = $value;
+			}
 		}
 
 		return $this;
 	}
+	
 
-	# Turn the sets array into a string for the SET statement
-	public function make_set(){
+
+
+
+	public function insert($table, $data = null){
+
+		if($data != null && is_array($data)){
+			$this->set($data);
+		}
+
+		if(!count($this->sets)){
+			$this->report_error('Database::insert() - No data to insert.', true);
+		}
+
+		$insert_query = 'INSERT INTO '.$table.$this->make_set($this->sets);
+
+		$this->sets = array();
+
+		$success = $this->run($insert_query);
+
+		$this->last_insert_id = $this->connection->insert_id;
+
+		return $success;
+	}
+	
+
+
+
+
+	public function update($table, $where = null, $data = null){
+
+		if($data != null && is_array($data)){
+			$this->set($data);
+		}
+
+		if(!count($this->sets)){
+			$this->report_error('Database::update() - Missing SET clause.', true);
+		}
+
+		$update_query = 'UPDATE '.$table.$this->make_set($this->sets);
+
+		if($where != null){
+			$update_query .= $this->make_where($where);
+		}else if($this->where != null){
+			$update_query .= $this->where;
+		}else{
+			$this->report_error('Database::update() - Missing WHERE clause.');
+		}
+
+		$this->reset();
+
+		$success = $this->run($update_query);
+
+		$this->num_updated_rows = $this->connection->affected_rows;
+
+		return $success;
+	}
+	
+
+
+
+
+	public function delete($table, $where = null){
+
+		# If the supplied $where is supplied ...
+		if($where != null){
+			# ... then add to the existing WHERE clause
+			$this->where .= $this->make_where($where);
+
+		# If $where is not supplied, and there is not an existing WHERE clause...
+		}else if($this->where == null){
+			# ... report an error
+			$this->report_error('Database::delete() - Missing WHERE clause.');
+		}
+
+		$delete_query = 'DELETE FROM '.$table.$this->where;
+
+		$this->run($delete_query);
+
+		$this->reset();
+
+		return $this;
+	}
+	
+
+
+
+
+	private function make_set($data){
 		$set = ' SET ';
 
-		foreach($this->sets as $field => $value){
-			$filtered_value = $this->connection->real_escape_string($value);
-			$set .= " $field = '$filtered_value', ";
+		foreach($data as $field => $val){
+			$val = $this->connection->real_escape_string($val);
+			$set .= $field.' = "'.$val.'", ';
 		}
 
-		# Chop off the last 2 characters of the SET statement
 		return substr($set, 0, -2);
 	}
+	
 
-	# Assemble the INSERT query, and send it to the db
-	public function insert($table){
-		$q  = "INSERT INTO $table ";
-		$q .= $this->make_set();
 
-		return $this->query($q);
-	}
 
-	# Assemble the UPDATE query and send it to the db
-	public function update($table){
-		$q  = "UPDATE $table ";
-		$q .= $this->make_set();
-		$q .= $this->where;
 
-		return $this->query($q);
-	}
+	private function make_where($data, $add_quotes = true, $or = false){
 
-	# Assemble a DELETE query and send it to the db
-	public function delete($table){
-		$q  = "DELETE FROM $table";
-		$q .= $this->where;
+		if(is_array($data)){
+			foreach($data as $field => $value){
+				$field = trim($field);
 
-		return $this->query($q);
-	}
+				$quotes = $add_quotes ? '"' : '';
 
-	# Turn SELECT query results into an associative array
-	public function assoc($result_object){
-		$rows = array();
+				$op = strpos($field, ' ') ? '' : '=';
 
-		while($item = $result_object->fetch_assoc()){
-			$rows[] = $item;
+				$value = $this->connection->real_escape_string($value);
+
+				if(!strpos($this->where, 'WHERE')){
+					$this->where .= ' WHERE '.$field.$op.$quotes.$value.$quotes.' ';
+				}elseif($or){
+					$this->where .= ' OR '.$field.$op.$quotes.$value.$quotes.' ';
+				}else{
+					$this->where .= ' AND '.$field.$op.$quotes.$value.$quotes.' ';
+				}
+			}
+		}else{
+			$this->where = ' WHERE '.$data;
 		}
 
+		return $this->where;
+	}
+	
+
+
+
+
+	private function reset(){
+		$this->select = '';
+		$this->from   = '';
+		$this->where  = '';
+		$this->order  = '';
+		$this->limit  = '';
+		$this->sets   = array();
+	}
+	
+
+
+
+
+	private function assoc($result){
+		while($row = $result->fetch_array(MYSQLI_ASSOC)){
+			$rows[] = $row;
+		}
 		return $rows;
 	}
+	
+
+
+
+
+	private function run($query){
+		$result = $this->connection->query($query);
+
+		$this->last_query = $query;
+
+		if(!$result) $this->report_query_error($query);
+
+		return $result;
+	}
+	
+
+
+
+
+	private function report_query_error($query, $exit = false){
+		if($this->debug){
+			echo '<div><b>Query Error: </b>'.$query.'</div>';
+			if($exit) exit;
+		}
+	}
+	
+
+
+
+
+	private function report_error($error, $exit = false){
+		if($this->debug){
+			echo '<div><b>Database Error: </b>'.$error.'</div>';
+			if($exit) exit;
+		}
+	}
+
 }
