@@ -9,6 +9,7 @@ class Database{
 	private $from;
 	private $order;
 	private $limit;
+	private $group;
 
 	public $last_query;
 	public $last_insert_id;
@@ -92,6 +93,26 @@ class Database{
 			$this->order = substr($order, 0, -2);
 		}else{
 			$this->order .= $order.$data.' '.$dir;
+		}
+
+		return $this;
+	}
+	
+
+
+
+
+	public function group_by($data){
+		$group = ' GROUP BY ';
+
+		if(is_array($data)){
+			foreach($data as $field){
+				$group .= $field.', ';
+			}
+
+			$this->group = substr($group, 0, -2);
+		}else{
+			$this->group = $group.$data;
 		}
 
 		return $this;
