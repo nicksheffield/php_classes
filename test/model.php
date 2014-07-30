@@ -1,7 +1,6 @@
 <?php
 
-
-require_once '../config.lib.php';
+require_once '../libraries/config.lib.php';
 
 Config::$username = 'ns_cmsuser';
 Config::$password = 'cms123';

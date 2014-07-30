@@ -1,6 +1,6 @@
 <?php
 
-require_once '../database.lib.php';
+require_once '../libraries/database.lib.php';
 
 $db = new Database('localhost', 'root', '', 'login');
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../hash.lib.php';
+require_once '../libraries/hash.lib.php';
 
 $pw = '123';
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../email.lib.php';
+require_once '../libraries/email.lib.php';
 
 $email = new Email();
 
