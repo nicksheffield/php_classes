@@ -95,6 +95,30 @@ class Model{
 
 	/**
 	*
+	*	Get a value from this model, but strip slashes, and strip most html tags first
+	*
+	*	@param string $var The key of the property to get out of this model
+	*
+	*	@return string The safe, filtered version of the data from the database
+	*
+	*/
+	public function get_filtered($var){
+		if(!$this->data[$var]){
+
+			$value = $this->data[$var];
+
+			$filtered_value = strip_tags($value, '<p><a><b><i><h1><h2><h3><h4><h5><h6>');
+			$filtered_value = strip_slashes($filtered_value);
+
+			return $filtered_value;
+
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	*
 	*	Load information from the database table
 	*
 	*	@param  int   $id The value of the id field in the table
