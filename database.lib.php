@@ -317,6 +317,8 @@ class Database{
 
 				$op = strpos($field, ' ') ? '' : '=';
 
+				$value = $this->connection->real_escape_string($value);
+
 				if(!strpos($this->where, 'WHERE')){
 					$this->where .= ' WHERE '.$field.$op.$quotes.$value.$quotes.' ';
 				}elseif($or){
