@@ -203,7 +203,7 @@ class Model{
 	public function hard_delete(){
 		return $this->db
 			->where($this->primary_key, $this->fields[$this->primary_key])
-			->delete();
+			->delete($this->table);
 	}
 
 }
