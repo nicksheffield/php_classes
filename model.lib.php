@@ -113,35 +113,28 @@ class Model{
 		return $result;
 	}
 
-	public function fill($data){
-
-		foreach($data as $key => $value){
-			if(in_array($key, $this->fields)){
-				$this->data[$key] = $value;
-			}
-		}
-
-		return $this->data;
-	}
-
 	/**
 	*
 	*	Fill the data array of this model. Useful for adding data from $_POST quickly
 	*
 	*	@param  array $data An associative array containing one or more fields => value pairs
 	*
-	*	@return array The data that was provided
+	*	@return array An associative array containing any data that was rejected
 	*
 	*/
 	public function fill($data){
 
-		if(is_array($this->data)){
-			$this->data = array_merge($this->data, $data);
-		}else{
-			$this->data = $data;
+		$not_added = array();
+
+		foreach($data as $key => $value){
+			if(in_array($key, $this->fields)){
+				$this->data[$key] = $value;
+			}else{
+				$not_added[$key] = $value;
+			}
 		}
 
-		return $data;
+		return $not_added;
 	}
 
 	/**
