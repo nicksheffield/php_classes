@@ -55,8 +55,14 @@ class Collection{
 	*	@param string $field The field to qualify which records are retrieved
 	*	
 	*/
-	public function load($field = false, $value = false){
+	public function load($param1 = false, $param2 = false){
 		$this->db->select('*')->from($this->table);
+
+		if(is_array($param1)){
+			$this->db->where($param1);
+		}else{
+			$this->db->where($param1, $param2);
+		}
 
 		if($field && $value){
 			$this->db->where($field, $value);
