@@ -60,7 +60,7 @@ class Model{
 	*/
 	function __get($var){
 		if(isset($this->data[$var])){
-			return $this->data[$var];
+			return $this->get_filtered($var);
 		}else{
 			return false;
 		}
