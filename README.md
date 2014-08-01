@@ -5,6 +5,12 @@ A set of useful php libraries
 
 ---
 
+###[Security](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/security.lib.php)
+
+Filter content for script tags.
+
+---
+
 ###[Cart](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/cart.lib.php)
 
 Manage storing products in a cart.
