@@ -20,11 +20,11 @@ class Image{
 	public function load($path){
 		$this->path = $path;
 
-		if(strstr($path, '.jpg') || strstr($path, '.jpeg')){
+		if(strstr(strtolower($path), '.jpg') || strstr(strtolower($path), '.jpeg')){
 			$this->data = imagecreatefromjpeg($path);
-		}elseif(strstr($path, '.png')){
+		}elseif(strstr(strtolower($path), '.png')){
 			$this->data = imagecreatefrompng($path);
-		}elseif(strstr($path, '.gif')){
+		}elseif(strstr(strtolower($path), '.gif')){
 			$this->data = imagecreatefromgif($path);
 		}else{
 			echo 'wrong filetype';
