@@ -4,15 +4,18 @@
 *
 *	Collection style model library
 *
-*	@uses Config, for db credentials. Database, for db connection
+*	@uses 	Config,   for db credentials.
+*			Database, for db connection.
+*			Model,    for containing records.
 *
 *	@version 1
-*	@author Nick Sheffield
+*	@author  Nick Sheffield
 *
 */
 
 require_once 'config.lib.php';
 require_once 'database.lib.php';
+require_once 'model.lib.php';
 
 class Collection{
 
@@ -27,18 +30,17 @@ class Collection{
 	*	If $field and $value are both provided, the load method is triggered with those params
 	*
 	*	@param string $table The name of the table this collection represents
-	*	@param string $field The field to qualify which records are retrieved
-	*	@param string $val   The value to quality which records are retrieved
+	*	@param string $where An array that represents the where query
 	*
 	*/
-	public function __construct($table, $field = false, $value = false){
+	public function __construct($table, $where = false){
 		$this->db = new Database(
 			Config::$database
 		);
 
 		$this->table = $table;
 
-		$this->load($field, $value);
+		$this->load($where);
 	}
 
 	/**
@@ -52,20 +54,22 @@ class Collection{
 	*	@param string $field The field to qualify which records are retrieved
 	*	
 	*/
-	public function load($param1 = false, $param2 = false){
+	public function load($where = false) {
 		$this->db->select('*')->from($this->table);
 
-		if(is_array($param1)){
-			$this->db->where($param1);
-		}else{
-			$this->db->where($param1, $param2);
-		}
-
-		if($field && $value){
-			$this->db->where($field, $value);
+		if($where) {
+			$this->db->where($where);
 		}
 
 		$this->items = $this->db->get();
+		
+		foreach($this->items as $key => $item){
+			$model = new Model($this->table);
+			
+			$model->fill($item);
+			
+			$this->items[$key] = $model;
+		}
 	}
 
 }
