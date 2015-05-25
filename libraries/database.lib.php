@@ -22,9 +22,14 @@ class Database{
 
 
 
-	public function __construct($hostname, $username, $password, $database){
+	public function __construct($credentials){
 
-		$this->connection = new mysqli($hostname, $username, $password, $database);
+		$this->connection = new mysqli(
+			$credentials['hostname'],
+			$credentials['username'],
+			$credentials['password'],
+			$credentials['database']
+		);
 
 		if($this->connection->errno){
 			$this->report_error('There was an error connecting to the database. <br>'.$this->connection->error, true);
@@ -391,7 +396,7 @@ class Database{
 
 		$this->last_query = $query;
 
-		if(!$result) $this->report_query_error($query);
+		if(!$result) $this->report_query_error($query, true);
 
 		return $result;
 	}
@@ -402,7 +407,24 @@ class Database{
 
 	private function report_query_error($query, $exit = false){
 		if($this->debug){
-			echo '<div><b>Query Error: </b>'.$query.'</div>';
+			echo '
+				<div style="
+					border: 2px red dotted;
+					padding: 1em;
+					background: pink;
+					line-height: 1.5;
+					font-family: monospace;
+				">
+					<b>There is something wrong with this query: </b>
+					<br>
+					<span style="font-size: 1.2em;">'.$query.'</span>
+					<hr>
+					<b>Error message:</b>
+					<br>
+					'.$this->connection->error.'
+				</div>
+			';
+			
 			if($exit) exit;
 		}
 	}
@@ -413,7 +435,19 @@ class Database{
 
 	private function report_error($error, $exit = false){
 		if($this->debug){
-			echo '<div><b>Database Error: </b>'.$error.'</div>';
+			echo '
+				<div style="
+					border: 2px red dotted;
+					padding: 1em;
+					background: pink;
+					line-height: 1.5;
+					font-family: monospace;
+				">
+					<b>Database Error: </b>
+					'.$error.'
+				</div>
+			';
+			
 			if($exit) exit;
 		}
 	}
