@@ -16,29 +16,34 @@ require_once 'database.lib.php';
 
 class Model{
 
-	protected $fields      = array();
-	protected $data        = array();
-	protected $db          = null;
-	protected $primary_key = 'id';
-	protected $table       = '';
+	protected $fields        = array();
+	protected $data          = array();
+	protected $db            = null;
+	protected $primary_key   = 'id';
+	protected $table         = '';
+	protected $ignore_fields = false;
 
 	/**
 	*
 	*	This method is called automatically when this class is constructed.
 	*
-	*	@param  string $table The table that this model is supposed to represent
+	*	@param  string  $table          The table that this model is supposed to represent
+	*	@param  boolean $ignore_fields  Whether or not to create a field whitelist of this table
 	*
 	*	@return $this
 	*
 	*/
-	function __construct($table){
+	function __construct($table, $ignore_fields = false){
 		$this->table = $table;
+		$this->ignore_fields = $ignore_fields;
 
 		$this->db = new Database(
 			Config::$database
 		);
 
-		$this->fields = $this->db->get_fields($this->table);
+		if(!$this->ignore_fields){
+			$this->fields = $this->db->get_fields($this->table);
+		}
 	}
 
 
@@ -57,7 +62,7 @@ class Model{
 	*/
 	function __get($var){
 		if(isset($this->data[$var])){
-			return $this->get_filtered($var);
+			return $this->data[$var];
 		}else{
 			return false;
 		}
@@ -82,34 +87,16 @@ class Model{
 	*
 	*/
 	function __set($var, $val){
-		if(in_array($var, $this->fields)){
+		if(!$this->ignore_fields){
+			if(in_array($var, $this->fields)){
+				$this->data[$var] = $val;
+				return true;
+			}else{
+				return false;
+			}
+		}else{
 			$this->data[$var] = $val;
 			return true;
-		}else{
-			return false;
-		}
-	}
-
-	/**
-	*
-	*	Get a value from this model, but strip slashes, and strip most html tags first
-	*
-	*	@param string $var The key of the property to get out of this model
-	*
-	*	@return string The safe, filtered version of the data from the database
-	*
-	*/
-	public function get_filtered($var){
-		if($this->data[$var]){
-
-			$value = $this->data[$var];
-
-			$filtered_value = strip_tags($value, '<p><a><b><i><h1><h2><h3><h4><h5><h6>');
-
-			return $filtered_value;
-
-		}else{
-			return false;
 		}
 	}
 
@@ -145,13 +132,17 @@ class Model{
 	public function fill($data){
 
 		$not_added = array();
-
-		foreach($data as $key => $value){
-			if(in_array($key, $this->fields)){
-				$this->data[$key] = $value;
-			}else{
-				$not_added[$key] = $value;
+		
+		if(!$this->ignore_fields){
+			foreach($data as $key => $value){
+				if(in_array($key, $this->fields)){
+					$this->data[$key] = $value;
+				}else{
+					$not_added[$key] = $value;
+				}
 			}
+		}else{
+			$this->data = $data;
 		}
 
 		return $not_added;
