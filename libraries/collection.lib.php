@@ -4,9 +4,9 @@
 *
 *	Collection style model library
 *
-*	@uses 	Config    for db credentials
-*			Database  for db connection
-*			Model     for containing records
+*	@uses 	Config,   for db credentials.
+*			Database, for db connection.
+*			Model,    for containing records.
 *
 *	@version 1
 *	@author  Nick Sheffield
@@ -30,7 +30,7 @@ class Collection{
 	*	If $field and $value are both provided, the load method is triggered with those params
 	*
 	*	@param string $table The name of the table this collection represents
-	*	@param array  $where An array that represents the where query
+	*	@param string $where An array that represents the where query
 	*
 	*/
 	public function __construct($table, $where = false){
@@ -51,7 +51,7 @@ class Collection{
 	*			 $products = new Collection('tb_products', 'cat_id', $_GET['cat_id']);
 	*
 	*	@param string $table The name of the table this collection represents
-	*	@param array  $where An array that represents the where query
+	*	@param string $field The field to qualify which records are retrieved
 	*	
 	*/
 	public function load($where = false) {
@@ -64,7 +64,7 @@ class Collection{
 		$this->items = $this->db->get();
 		
 		foreach($this->items as $key => $item){
-			$model = new Model($this->table);
+			$model = new Model($this->table, true);
 			
 			$model->fill($item);
 			
