@@ -5,6 +5,20 @@ A set of useful php libraries
 
 ---
 
+###[Database](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/database.lib.php)
+
+Connect to a database, construct queries, and run them.
+
+Make sure you use the most up to date version of this.
+
+---
+
+###[Form](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/form.lib.php)
+
+Create HTML forms.
+
+---
+
 ###[Security](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/security.lib.php)
 
 Filter content for script tags.
@@ -29,31 +43,9 @@ Store database credentials and other pieces of information for access anywhere i
 
 ---
 
-###[Database](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/database.lib.php)
-
-Connect to a database, construct queries, and run them.
-
-Make sure you use the most up to date version of this.
-
----
-
 ###[Email](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/email.lib.php)
 
 Create and send simple html emails.
-
----
-
-###[Form](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/form.lib.php)
-
-Create HTML forms.
-
----
-
-###[Hash](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/hash.lib.php)
-
-Password hashing done properly.
-
-Make sure you use the most up to date version of this.
 
 ---
 
