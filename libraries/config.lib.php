@@ -1,19 +1,21 @@
 <?php
 
-/*
-	
-	Config info class
-
-	usage   : Static
-	version : 1
-	author  : Nick Sheffield
-
+/**
+*	Config info class
+*
+*	@version 1.0
+*	@author  Nick Sheffield
+*
 */
+
 class Config{
 
-	public static $hostname = 'localhost';
-	public static $username = '';
-	public static $password = '';
-	public static $database = '';
+	public static $database = [
+		'hostname' => 'localhost',
+		'username' => '',
+		'password' => '',
+		'database' => ''
+	];
+	
 
 }
