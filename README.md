@@ -19,9 +19,9 @@ Create HTML forms.
 
 ---
 
-###[Security](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/security.lib.php)
+###[XSS](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/xss.lib.php)
 
-Filter content for script tags.
+Filter script tags out of html content.
 
 ---
 

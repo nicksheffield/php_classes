@@ -3,6 +3,7 @@
 /**
 *	
 *	Output filtering library.
+*	Used to prevent XSS vulnerabilities.
 *	
 *	Used in static context.
 *
@@ -12,7 +13,7 @@
 */
 
 
-class Security{
+class XSS {
 	
 	/**
 	*
@@ -67,7 +68,7 @@ class Security{
 	*	@return str The filtered html
 	*
 	**/
-	public static function xss($value) {
+	public static function filter($value) {
 		return strip_tags($value, self::create_whitelist());
 	}
 	
