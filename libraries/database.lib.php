@@ -86,8 +86,8 @@ class Database{
 		$order = ' ORDER BY ';
 
 		if(is_array($data)){
-			foreach($data as $field){
-				$order .= $field.', ';
+			foreach($data as $field => $direction){
+				$order .= $field.' '.$direction.', ';
 			}
 
 			$this->order = substr($order, 0, -2);
