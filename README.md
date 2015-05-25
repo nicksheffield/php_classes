@@ -49,12 +49,6 @@ Create and send simple html emails.
 
 ---
 
-###[Image](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/image.lib.php)
-
-Load an image that already exists on your server, resize it, and save it as another file.
-
----
-
 ###[Login](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/login.lib.php)
 
 Handle user details in the session.
@@ -110,3 +104,11 @@ Save, Load, Update and Delete records from any database table.
 
 ?>
 ```
+
+---
+
+###[Image](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/image.lib.php)
+
+> Experimental
+
+Load an image that already exists on your server, resize it, and save it as another file.
