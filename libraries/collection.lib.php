@@ -33,9 +33,6 @@ class Collection{
 	*/
 	public function __construct($table, $field = false, $value = false){
 		$this->db = new Database(
-			Config::$hostname,
-			Config::$username,
-			Config::$password,
 			Config::$database
 		);
 

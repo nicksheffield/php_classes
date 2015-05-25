@@ -35,9 +35,6 @@ class Model{
 		$this->table = $table;
 
 		$this->db = new Database(
-			Config::$hostname,
-			Config::$username,
-			Config::$password,
 			Config::$database
 		);
 
