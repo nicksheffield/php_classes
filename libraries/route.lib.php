@@ -2,7 +2,25 @@
 
 class Route {
 	
-	public static function add($path, $file){
+	private static $params = [];
+	
+	public static function param($name){
+		return self::$params[$name];
+	}
+	
+	public static function get($path, $file){
+		if($_SERVER['REQUEST_METHOD'] == 'GET'){
+			self::check($path, $file);
+		}
+	}
+	
+	public static function post($path, $file){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			self::check($path, $file);
+		}
+	}
+	
+	private static function check($path, $file){
 		# use QUERY_STRING or default to ''
 		$server_path = $_SERVER['QUERY_STRING'] ?: '';
 		
@@ -26,7 +44,8 @@ class Route {
 			foreach($server_path as $key => $sp_segment){
 				# check if this one is a param
 				if(substr($path[$key], 0, 1) == ':'){
-					# if it is, then allow it
+					# if it is, then add it to $params
+					self::$params[substr($path[$key], 1)] = $sp_segment;
 				}else{
 					# if not, then check if the segments are the same
 					if($server_path[$key] != $path[$key]){
@@ -44,7 +63,7 @@ class Route {
 		}
 	}
 	
-	public static function no_route($file){
+	public static function fallback($file){
 		require_once $file;
 		exit;
 	}
