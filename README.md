@@ -112,3 +112,33 @@ Save, Load, Update and Delete records from any database table.
 > Experimental
 
 Load an image that already exists on your server, resize it, and save it as another file.
+
+---
+
+###[Route](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/route.lib.php)
+
+> Experimental
+
+Require php files based on the url
+
+If you use this, make sure you include the .htaccess file
+
+```
+<Files .htaccess>
+	order allow,deny
+	deny from all
+</Files>
+ 
+RewriteEngine on
+ 
+# Don't use rewrite if its a real file or folder
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+ 
+# In addition to the above rules, also ignore the index.php 
+# file, anything in the assets folder and the robots.txt file
+RewriteCond $1 !^(index\.php|assets|robots\.txt)
+ 
+# Route everything else through the index.php file.
+RewriteRule ^(.*)$ index.php?/$1 [L]
+```
