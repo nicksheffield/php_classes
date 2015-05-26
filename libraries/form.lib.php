@@ -8,13 +8,14 @@
 *
 */
 
-class Form{
+class Form {
 
 	/**
 	*	Creates a form open tag
 	*	
 	*	@param  string $action The url for the form to post to
 	*	@param  string $method Either "post" or "get"
+	*	@param  array  $extras Any extra attributes we want to add
 	*
 	*	@return string $html   The completed form tag
 	*	
@@ -29,6 +30,7 @@ class Form{
 	*	Creates a form open tag that works with uploads
 	*	
 	*	@param  string $action The url for the form to post to
+	*	@param  array  $extras Any extra attributes we want to add
 	*
 	*	@return string $html   The completed form tag
 	*	
