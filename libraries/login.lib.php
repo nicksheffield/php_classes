@@ -75,6 +75,9 @@ class Login{
 	private static function create_user(){
 		if(!isset($_SESSION['user'])){
 			$_SESSION['user'] = array();
+			$_SESSION['user']['id'] = 0;
+			$_SESSION['user']['is_admin'] = false;
+			$_SESSION['user']['logged_in'] = false;
 		}
 	}
 }
