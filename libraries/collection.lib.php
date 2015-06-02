@@ -55,6 +55,8 @@ class Collection{
 	*	
 	*/
 	public function load($where = false) {
+		$this->items = [];
+		
 		$this->db->select('*')->from($this->table);
 
 		if($where) {
