@@ -10,6 +10,8 @@
 
 session_start();
 
+require_once 'url.lib.php';
+
 class Login{
 
 	public static function log_in($id = 0, $admin = false){
@@ -37,16 +39,14 @@ class Login{
 	public static function kickout($url = 'login.php'){
 		self::create_user();
 		if($_SESSION['user']['logged_in'] == false){
-			header('location: '.$url);
-			exit;
+			URL::redirect($url);
 		}
 	}
 
 	public static function kickout_non_admin($url = 'index.php'){
 		self::create_user();
 		if($_SESSION['user']['logged_in'] == false || $_SESSION['user']['is_admin'] == false){
-			header('location: '.$url);
-			exit;
+			URL::redirect($url);
 		}
 	}
 
