@@ -139,6 +139,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # file, anything in the assets folder and the robots.txt file
 RewriteCond $1 !^(index\.php|assets|robots\.txt)
  
-# Route everything else through the index.php file.
+# Route everything else through the index.php file
 RewriteRule ^(.*)$ index.php?/$1 [L]
 ```
