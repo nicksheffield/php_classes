@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 2.0
+*	@version 2.1
 *	@author  Nick Sheffield
 *
 */
@@ -245,7 +245,7 @@ class Model{
 
 	public function hard_delete(){
 		return $this->db
-			->where($this->primary_key, $this->fields[$this->primary_key])
+			->where($this->primary_key, $this->data[$this->primary_key])
 			->delete($this->table);
 	}
 
