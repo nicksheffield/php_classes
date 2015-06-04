@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 1.5
+*	@version 2.0
 *	@author  Nick Sheffield
 *
 */
@@ -21,29 +21,32 @@ class Model{
 	protected $db            = null;
 	protected $primary_key   = 'id';
 	protected $table         = '';
-	protected $ignore_fields = false;
+	protected $check_fields  = true;
 
 	/**
 	*
 	*	This method is called automatically when this class is constructed.
 	*
 	*	@param  string  $table          The table that this model is supposed to represent
-	*	@param  boolean $ignore_fields  Whether or not to create a field whitelist of this table
+	*	@param  boolean $check_fields   Whether or not to create a field whitelist of this table
 	*
 	*	@return $this
 	*
 	*/
-	function __construct($table, $ignore_fields = false){
-		$this->table = $table;
-		$this->ignore_fields = $ignore_fields;
-
-		$this->db = new Database(
-			Config::$database
-		);
-
-		if(!$this->ignore_fields){
-			$this->fields = $this->db->get_fields($this->table);
+	function __construct($table = '', $check_fields = true){
+		
+		$this->check_fields = $check_fields;
+		$this->db = new Database(Config::$database);
+		
+		if($table){
+			$this->table = $table;
 		}
+		
+		if($this->table && $this->check_fields){
+			$this->get_fields();
+		}
+		
+		return $this;
 	}
 
 
@@ -96,7 +99,7 @@ class Model{
 	*
 	*/
 	function __set($var, $val){
-		if(!$this->ignore_fields){
+		if($this->check_fields){
 			if(in_array($var, $this->fields)){
 				$this->data[$var] = $val;
 				return true;
@@ -108,6 +111,26 @@ class Model{
 			return true;
 		}
 	}
+	
+	/**
+	*
+	*
+	*/
+	public function load_fields(){
+		$this->fields = $this->db->get_fields($this->table);
+		
+		return $this;
+	}
+	
+	/**
+	*
+	*
+	*/
+	public function set_table($table){
+		$this->table = $table;
+		
+		return $this;
+	}
 
 	/**
 	*
@@ -115,7 +138,7 @@ class Model{
 	*
 	*	@param  int   $id The value of the id field in the table
 	*
-	*	@return array An assoc array of the fields and values that were loaded
+	*	@return $this
 	*
 	*/
 	public function load($id){
@@ -126,7 +149,8 @@ class Model{
 			->get_one();
 
 		$this->data = $result;
-		return $result;
+		
+		return $this;
 	}
 
 	/**
@@ -135,14 +159,14 @@ class Model{
 	*
 	*	@param  array $data An associative array containing one or more fields => value pairs
 	*
-	*	@return array An associative array containing any data that was rejected
+	*	@return $this
 	*
 	*/
 	public function fill($data){
 
 		$not_added = array();
 		
-		if(!$this->ignore_fields){
+		if($this->check_fields){
 			foreach($data as $key => $value){
 				if(in_array($key, $this->fields)){
 					$this->data[$key] = $value;
@@ -154,7 +178,7 @@ class Model{
 			$this->data = $data;
 		}
 
-		return $not_added;
+		return $this;
 	}
 
 	/**
@@ -180,7 +204,6 @@ class Model{
 		}
 
 		return $success;
-
 	}
 
 	/**
