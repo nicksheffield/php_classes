@@ -43,7 +43,7 @@ class Model{
 		}
 		
 		if($this->table && $this->check_fields){
-			$this->get_fields();
+			$this->load_fields();
 		}
 		
 		return $this;
@@ -117,7 +117,7 @@ class Model{
 	*
 	*/
 	public function load_fields(){
-		$this->fields = $this->db->get_fields($this->table);
+		$this->fields = $this->db->get_columns($this->table);
 		
 		return $this;
 	}
