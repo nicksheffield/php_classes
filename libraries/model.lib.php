@@ -99,6 +99,10 @@ class Model{
 	*
 	*/
 	function __set($var, $val){
+		if($var == 'primary_key'){
+			$this->primary_key = $val;
+		}
+
 		if($this->check_fields){
 			if(in_array($var, $this->fields)){
 				$this->data[$var] = $val;
