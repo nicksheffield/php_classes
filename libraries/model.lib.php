@@ -237,8 +237,12 @@ class Model{
 	*/
 
 	public function soft_delete(){
-		$this->data['deleted'] = 1;
-		return $this->save();
+		if($this->data[$this->primary_key]){
+			$this->data['deleted'] = 1;
+			return $this->save();
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -253,9 +257,13 @@ class Model{
 	*/
 
 	public function hard_delete(){
-		return $this->db
-			->where($this->primary_key, $this->data[$this->primary_key])
-			->delete($this->table);
+		if($this->data[$this->primary_key]){
+			return $this->db
+				->where($this->primary_key, $this->data[$this->primary_key])
+				->delete($this->table);
+		}else{
+			return false;
+		}
 	}
 
 }
