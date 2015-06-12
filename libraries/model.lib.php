@@ -145,12 +145,17 @@ class Model{
 	*	@return $this
 	*
 	*/
-	public function load($id){
-		$result = $this->db
-			->select('*')
-			->from($this->table)
-			->where($this->primary_key, $id)
-			->get_one();
+	public function load($data){
+		
+		$this->db->select('*')->from($this->table);
+		
+		if(is_array($data)){
+			$this->db->where($data);
+		}else{
+			$this->db->where($this->primary_key, $data);
+		}
+		
+		$result = $this->db->get_one();
 
 		$this->data = $result;
 		
