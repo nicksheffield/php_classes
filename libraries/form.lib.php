@@ -21,8 +21,12 @@ class Form {
 	*	
 	*/
 	public static function open($action = '', $method = 'post', $extras = []){
-		$extras = self::make_extras($extras);
-		$html = "<form action='$action' method='$method' $extras>";
+		$attrs = self::make_attrs(array_merge([
+			'action' => $action,
+			'method' => $method
+		], $extras));
+
+		$html = "<form $attrs>";
 		return $html;
 	}
 
@@ -36,8 +40,11 @@ class Form {
 	*	
 	*/
 	public static function open_upload($action = '', $extras = []){
-		$extras = self::make_extras($extras);
-		$html = "<form action='$action' method='post' enctype='multipart/form-data' $extras>";
+		$attrs = self::make_attrs(array_merge([
+			'action' => $action
+		], $extras));
+
+		$html = "<form $attrs enctype='multipart/form-data'>";
 		return $html;
 	}
 
@@ -63,8 +70,14 @@ class Form {
 	*	
 	*/
 	public static function input($type, $name, $value = '', $extras = []){
-		$extras = self::make_extras($extras);
-		$html = "<input type='$type' id='$name' name='$name' value='$value' $extras>";
+		$attrs = self::make_attrs(array_merge([
+			'type'  => $type,
+			'name'  => $name,
+			'id'    => $name,
+			'value' => $value
+		], $extras));
+
+		$html = "<input $attrs>";
 		return $html;
 	}
 
@@ -77,9 +90,10 @@ class Form {
 	*	@return string  A valid string of html attributes
 	*
 	*/
-	public static function make_extras($extras){
+	public static function make_attrs($attrs){
 		$html = '';
-		foreach($extras as $key => $val){
+		foreach($attrs as $key => $val){
+			$val = str_replace('\'', '&apos;', $val);
 			$html .= " $key='$val' ";
 		}
 		return $html;
@@ -96,8 +110,10 @@ class Form {
 	*	
 	*/
 	public static function label($for, $text, $extras = []){
-		$extras = self::make_extras($extras);
-		$html = "<label for='$for' $extras>$text</label>";
+		$attrs = self::make_attrs(array_merge([
+			'for'  => $for
+		], $extras));
+		$html = "<label $attrs>$text</label>";
 		return $html;
 	}
 
@@ -112,8 +128,12 @@ class Form {
 	*	
 	*/
 	public static function textarea($name, $value = '', $extras = []){
-		$extras = self::make_extras($extras);
-		$html = "<textarea id='$name' name='$name' $extras>$value</textarea>";
+		$attrs = self::make_attrs(array_merge([
+			'name'  => $name,
+			'id'    => $name
+		], $extras));
+
+		$html = "<textarea $attrs>$value</textarea>";
 		return $html;
 	}
 
@@ -153,8 +173,13 @@ class Form {
 	*	
 	*/
 	public static function select($name, $values, $pre_selected = '', $extras = []){
-		$extras = self::make_extras($extras);
-		$html = "<select name='$name' id='$name' $extras>";
+
+		$attrs = self::make_attrs(array_merge([
+			'name'  => $name,
+			'id'    => $name
+		], $extras));
+
+		$html = "<select $attrs>";
 		$html .= self::options($values, $pre_selected);
 		$html .= '</select>';
 		return $html;
