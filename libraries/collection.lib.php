@@ -33,14 +33,12 @@ class Collection{
 	*	@param string $where An array that represents the where query
 	*
 	*/
-	public function __construct($table, $where = false){
-		$this->db = new Database(
-			Config::$database
-		);
+	public function __construct($table, $where = false, $order_by = false){
+		$this->db = new Database( Config::$database );
 
 		$this->table = $table;
 
-		$this->load($where);
+		$this->load($where, $order_by);
 	}
 
 	/**
@@ -54,7 +52,7 @@ class Collection{
 	*	@param string $field The field to qualify which records are retrieved
 	*	
 	*/
-	public function load($where = false) {
+	public function load($where = false, $order_by = false) {
 		$this->items = [];
 		
 		$this->db->select('*')->from($this->table);
@@ -62,16 +60,28 @@ class Collection{
 		if($where) {
 			$this->db->where($where);
 		}
+		
+		if($order_by){
+			$this->db->order_by($order_by);
+		}
 
 		$this->items = $this->db->get();
 		
 		foreach($this->items as $key => $item){
-			$model = new Model($this->table, true);
+			$model = new Model($this->table, false);
 			
 			$model->fill($item);
 			
 			$this->items[$key] = $model;
 		}
+	}
+	
+	public function limit($count, $start = 0){
+		
+	}
+	
+	public function paginate($count, $page = 1){
+		
 	}
 
 }
