@@ -121,7 +121,7 @@ class Model{
 	*
 	*/
 	public function load_fields(){
-		$this->fields = Field_Provider::table($this->table);
+		$this->fields = Field_Provider::table($this->table, $this->db);
 		
 		return $this;
 	}
@@ -272,16 +272,13 @@ class Model{
 class Field_Provider {
 	
 	private static $tables = [];
-	public static $db;
 	
-	public static function table($name){
+	public static function table($name, $db){
 		if(self::$tables[$name] === null){
-			self::$tables[$name] = self::$db->get_columns($name);
+			self::$tables[$name] = $db->get_columns($name);
 		}
 		
 		return self::$tables[$name];
 	}
 	
 }
-
-Field_Provider::$db = new Database(Config::$database);
