@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 2.1
+*	@version 3.0
 *	@author  Nick Sheffield
 *
 */
@@ -121,7 +121,7 @@ class Model{
 	*
 	*/
 	public function load_fields(){
-		$this->fields = $this->db->get_columns($this->table);
+		$this->fields = Field_Provider::table($this->table);
 		
 		return $this;
 	}
@@ -267,3 +267,21 @@ class Model{
 	}
 
 }
+
+
+class Field_Provider {
+	
+	private static $tables = [];
+	public static $db;
+	
+	public static function table($name){
+		if(self::$tables[$name] === null){
+			self::$tables[$name] = self::$db->get_columns($name);
+		}
+		
+		return self::$tables[$name];
+	}
+	
+}
+
+Field_Provider::$db = new Database(Config::$database);
