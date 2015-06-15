@@ -49,7 +49,7 @@ Create and send simple html emails.
 
 ---
 
-###[Login](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/login.lib.php)
+###[Auth](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/auth.lib.php)
 
 Handle user details in the session.
 
@@ -70,40 +70,6 @@ Handle redirecting, and saving/restoring urls.
 ###[Model](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/model.lib.php)
 
 Save, Load, Update and Delete records from any database table.
-
-**Example of a model that extends model.lib.php**
-```php
-<?php
-
-	require_once '../model.lib.php'; # You need this always
-	require_once '../hash.lib.php';  # This is just for the example
-
-	class User extends Model{
-		protected $table = 'tb_users';
-
-		function __construct(){
-			parent::__construct($this->table);
-		}
-
-		# Put your own custom methods for this model here
-		public function authenticate(){
-			$user = $this->db
-				->select('id, password')
-				->from($this->table)
-				->where('username', $this->data['username'])
-				->get_one();
-
-			if(Hash::check($this->data['password'],$user['password'])){
-				$this->load($user['id']);
-				return true;
-			}else{
-				return false;
-			}
-		}
-	}
-
-?>
-```
 
 ---
 
