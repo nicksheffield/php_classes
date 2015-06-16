@@ -401,6 +401,15 @@ class Database{
 		return $result;
 	}
 	
+	
+	
+	public function query($query, $return_boolean = false){
+		
+		$result = $this->assoc($this->run($query));
+		
+		return $return_boolean ? (bool)$result : $result;
+	}
+	
 
 
 
