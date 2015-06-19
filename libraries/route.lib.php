@@ -1,5 +1,34 @@
 <?php
 
+/*
+
+	To get this to work, please put the following code
+	into an .htaccess file located in your public folder
+
+*/
+
+/*
+
+<Files .htaccess>
+	order allow,deny
+	deny from all
+</Files>
+ 
+RewriteEngine on
+ 
+# Don't use rewrite if its a real file or folder
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+ 
+# In addition to the above rules, also ignore the index.php 
+# file, anything in the assets folder and the robots.txt file
+RewriteCond $1 !^(index\.php|assets|robots\.txt)
+ 
+# Route everything else through the index.php file.
+RewriteRule ^(.*)$ index.php?/$1 [L]
+
+*/
+
 class Route {
 	
 	private static $params = [];
