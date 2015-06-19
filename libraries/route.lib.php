@@ -62,5 +62,9 @@ class Route {
 		require_once $file;
 		exit;
 	}
+
+	public static function asset($url){
+		return dirname($_SERVER['PHP_SELF']).'/'.$url;
+	}
 	
 }
