@@ -22,12 +22,7 @@ class Route {
 	
 	private static function check($path, $file){
 		# use QUERY_STRING or default to ''
-		$server_path = $_SERVER['QUERY_STRING'] ?: '';
-		
-		# remove the first slash
-		if(substr($server_path, 0, 1) == '/'){
-			$server_path = substr($server_path, 1);
-		}
+		$server_path = $_SERVER['QUERY_STRING'] ?: '/';
 		
 		# break up $server_path into segments
 		$server_path = explode('/', $server_path);
