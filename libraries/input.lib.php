@@ -23,6 +23,10 @@ class Input{
 	public static function posted(){
 		return !!count(self::$data);
 	}
+	
+	public static function all(){
+		return self::$data;
+	}
 }
 
 foreach($_POST as $key => $val){
