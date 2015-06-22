@@ -25,4 +25,8 @@ class Sticky{
 	public static function set($var, $val){
 		self::$data[$var] = $val;
 	}
+	
+	public static function fill($data){
+		self::$data = array_merge(self::$data, $data);
+	}
 }
