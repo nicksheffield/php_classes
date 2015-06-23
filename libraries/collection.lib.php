@@ -8,7 +8,7 @@
 *			Database, for db connection.
 *			Model,    for containing records.
 *
-*	@version 1
+*	@version 2.0
 *	@author  Nick Sheffield
 *
 */
@@ -17,7 +17,7 @@ require_once 'config.lib.php';
 require_once 'database.lib.php';
 require_once 'model.lib.php';
 
-class Collection{
+class Collection {
 
 	public     $items  = array();
 	protected  $db     = null;
@@ -33,12 +33,12 @@ class Collection{
 	*	@param string $where An array that represents the where query
 	*
 	*/
-	public function __construct($table, $where = false, $order_by = false){
+	public function __construct($table = false){
 		$this->db = new Database( Config::$database );
 
-		$this->table = $table;
-
-		$this->load($where, $order_by);
+		if($table != false){
+			$this->table = $table;
+		}
 	}
 
 	/**
@@ -52,18 +52,10 @@ class Collection{
 	*	@param string $field The field to qualify which records are retrieved
 	*	
 	*/
-	public function load($where = false, $order_by = false) {
+	public function get() {
 		$this->items = [];
 		
 		$this->db->select('*')->from($this->table);
-
-		if($where) {
-			$this->db->where($where);
-		}
-		
-		if($order_by){
-			$this->db->order_by($order_by);
-		}
 
 		$this->items = $this->db->get();
 		
@@ -76,12 +68,29 @@ class Collection{
 		}
 	}
 	
-	public function limit($count, $start = 0){
+	public function where($param1, $param2 = null, $param3 = null, $param4 = null){
+		$this->db->where($param1, $param2, $param3, $param4);
 		
+		return $this;
+	}
+	
+	public function order_by($data, $dir = null){
+		$this->db->order_by($data, $dir);
+				
+		return $this;
+	}
+	
+	public function limit($from, $count){
+		$this->db->limit($from, $count);
+		
+		return $this;
 	}
 	
 	public function paginate($count, $page = 1){
+		$this->db->limit(($page - 1) * $count, $count);
 		
+		return $this;
 	}
+	
 
 }
