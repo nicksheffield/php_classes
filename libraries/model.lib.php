@@ -13,6 +13,7 @@
 
 require_once 'config.lib.php';
 require_once 'database.lib.php';
+require_once 'xss.lib.php';
 
 class Model{
 
@@ -65,16 +66,7 @@ class Model{
 	*/
 	function __get($var){
 		if(isset($this->data[$var])){
-			if(class_exists('XSS')){
-				return XSS::filter($this->data[$var]);
-			}else{
-				if(file_exists('../libraries/xss.lib.php')){
-					require_once 'xss.lib.php';
-					return XSS::filter($this->data[$var]);
-				}else{
-					return $this->data[$var];
-				}
-			}
+			return XSS::filter($this->data[$var]);
 		}else{
 			return false;
 		}
