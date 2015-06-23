@@ -17,5 +17,6 @@ class Config{
 		'database' => ''
 	];
 	
+	public static $auth_table = 'users';
 
 }
