@@ -3,7 +3,7 @@
 /**
 *	Authentication class
 *
-*	@version 1.1
+*	@version 2.0
 *	@author  Nick Sheffield
 *
 */
@@ -11,8 +11,12 @@
 session_start();
 
 require_once 'url.lib.php';
+require_once 'config.lib.php';
+require_once 'model.lib.php';
 
 class Auth{
+	
+	public static $user = null;
 
 	public static function log_in($id = 0, $admin = false){
 		self::create_user();
@@ -72,6 +76,12 @@ class Auth{
 
 
 
+	public static function user(){
+		return self::$user;
+	}
+
+
+
 	private static function create_user(){
 		if(!isset($_SESSION['user'])){
 			$_SESSION['user'] = array();
@@ -80,4 +90,10 @@ class Auth{
 			$_SESSION['user']['logged_in'] = false;
 		}
 	}
+}
+
+
+if(Config::$auth_table && Auth::is_logged_in()){
+	Auth::$user = new Model(Config::$auth_table);
+	Auth::$user->load(Auth::user_id());
 }
