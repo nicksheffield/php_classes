@@ -18,5 +18,7 @@ class Config{
 	];
 	
 	public static $auth_table = 'users';
+	
+	public static $sitename = 'default';
 
 }

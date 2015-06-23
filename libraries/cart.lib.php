@@ -13,6 +13,8 @@
 
 session_start();
 
+require_once 'config.lib.php';
+
 class Cart{
 
 	/**
@@ -29,10 +31,10 @@ class Cart{
 	public static function add_product($id, $qty){
 		self::create_cart();
 
-		if(isset($_SESSION['cart'][$id])){
-			$_SESSION['cart'][$id] += intval($qty);
+		if(isset($_SESSION[Config::$sitename]['cart'][$id])){
+			$_SESSION[Config::$sitename]['cart'][$id] += intval($qty);
 		}else{
-			$_SESSION['cart'][$id] = intval($qty);
+			$_SESSION[Config::$sitename]['cart'][$id] = intval($qty);
 		}
 		
 	}
@@ -47,7 +49,7 @@ class Cart{
 	**/
 	public static function remove_product($id){
 		self::create_cart();
-		unset($_SESSION['cart'][$id]);
+		unset($_SESSION[Config::$sitename]['cart'][$id]);
 	}
 
 
@@ -62,7 +64,7 @@ class Cart{
 	public static function set_quantity($id, $qty){
 		self::create_cart();
 
-		$_SESSION['cart'][$id] = intval($qty);
+		$_SESSION[Config::$sitename]['cart'][$id] = intval($qty);
 	}
 
 
@@ -78,7 +80,7 @@ class Cart{
 
 		$amount = 0;
 
-		foreach($_SESSION['cart'] as $quantity){
+		foreach($_SESSION[Config::$sitename]['cart'] as $quantity){
 			$amount += $quantity;
 		}
 
@@ -93,7 +95,7 @@ class Cart{
 	**/
 	public static function get_cart(){
 		self::create_cart();
-		return $_SESSION['cart'];
+		return $_SESSION[Config::$sitename]['cart'];
 	}
 
 
@@ -103,7 +105,7 @@ class Cart{
 	*
 	**/
 	public static function clear_cart(){
-		$_SESSION['cart'] = array();
+		$_SESSION[Config::$sitename]['cart'] = array();
 	}
 
 
@@ -114,8 +116,8 @@ class Cart{
 	*
 	**/
 	private static function create_cart(){
-		if(!isset($_SESSION['cart'])){
-			$_SESSION['cart'] = array();
+		if(!isset($_SESSION[Config::$sitename]['cart'])){
+			$_SESSION[Config::$sitename]['cart'] = array();
 		}
 	}
 
