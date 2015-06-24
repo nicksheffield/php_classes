@@ -9,8 +9,6 @@ A set of useful php libraries
 
 Connect to a database, construct queries, and run them.
 
-Make sure you use the most up to date version of this.
-
 ---
 
 ###[Form](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/form.lib.php)
@@ -21,7 +19,7 @@ Create HTML forms.
 
 ###[XSS](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/xss.lib.php)
 
-Filter script tags out of html content.
+Filter HTML content to prevent Cross-Site Scripping attacks
 
 ---
 
@@ -33,19 +31,19 @@ Manage storing products in a cart.
 
 ###[Collection](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/collection.lib.php)
 
-Load many records from a database table.
+Load multiple records from a database table.
 
 ---
 
 ###[Config](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/config.lib.php)
 
-Store database credentials and other pieces of information for access anywhere in your code.
+Store data that can be accessed easily from anywhere in your code.
 
 ---
 
 ###[Email](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/email.lib.php)
 
-Create and send simple html emails.
+Send an email with PHP.
 
 ---
 
@@ -69,7 +67,19 @@ Handle redirecting, and saving/restoring urls.
 
 ###[Model](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/model.lib.php)
 
-Save, Load, Update and Delete records from any database table.
+Easily perform CRUD on a database table.
+
+---
+
+###[Input](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/input.lib.php)
+
+Provide an interface for dealing with $_POST content.
+
+---
+
+###[Sticky](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/sticky.lib.php)
+
+Used for filling form fields with prefilled data, or data from the previous request.
 
 ---
 
@@ -77,15 +87,13 @@ Save, Load, Update and Delete records from any database table.
 
 > Experimental
 
-Load an image that already exists on your server, resize it, and save it as another file.
+Make resized copies of images. This library is experemental.
 
 ---
 
 ###[Route](https://raw.githubusercontent.com/nicksheffield/php_classes/master/libraries/route.lib.php)
 
-> Experimental
-
-Require php files based on the url
+Create custom URL routes that point wherever you want. This library is experemental.
 
 If you use this, make sure you include the .htaccess file
 
