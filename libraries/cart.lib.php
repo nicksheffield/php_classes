@@ -30,6 +30,8 @@ class Cart{
 	**/
 	public static function add_product($id, $qty){
 		self::create_cart();
+		
+		if(!$id) return;
 
 		if(isset($_SESSION[Config::$sitename]['cart'][$id])){
 			$_SESSION[Config::$sitename]['cart'][$id] += intval($qty);
@@ -63,6 +65,8 @@ class Cart{
 	**/
 	public static function set_quantity($id, $qty){
 		self::create_cart();
+		
+		if(!$id) return;
 
 		$_SESSION[Config::$sitename]['cart'][$id] = intval($qty);
 	}
