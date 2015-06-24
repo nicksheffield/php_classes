@@ -421,4 +421,12 @@ class Form {
 		$html = self::input('range', $name, $value, $extras);
 		return $html;
 	}
+	
+	public static function button($content, $extras = []){
+		$attrs = self::make_attrs(array_merge([
+			'type'  => 'submit'
+		], $extras));
+		
+		return "<button $attrs>$content</button>";
+	}
 }
