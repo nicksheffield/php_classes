@@ -14,8 +14,11 @@
 session_start();
 
 require_once 'config.lib.php';
+require_once 'collection.lib.php';
 
 class Cart{
+	
+	public static $products = [];
 
 	/**
 	*
@@ -111,6 +114,46 @@ class Cart{
 	public static function clear_cart(){
 		$_SESSION[Config::$sitename]['cart'] = array();
 	}
+	
+	
+	
+	public static function products(){
+		return self::$products;
+	}
+	
+	
+	public static function load_products(){
+		if(!Config::$cart_table) return;
+		
+		# create a collection for the products table
+		$col = new Collection(Config::$cart_table);
+		
+		# loop through the products in the cart
+		foreach(self::get_cart() as $id => $qty){
+			# select those products by their ids
+			# field, value, use_quotes, or
+			$col->where('id', $id, true, true);
+		}
+		
+		# if there is any products in the cart at all
+		if(self::get_total()){
+			# then load them all into the collection
+			$col->get();
+		}
+		
+		# clear the static products array
+		self::$products = [];
+		
+		# for each item in the collection
+		foreach($col->items as $product){
+			
+			# add a quantity property to the model
+			$product->quantity = $_SESSION[Config::$sitename]['cart'][$product->id];
+			
+			# add the product object into the products array
+			self::$products[] = $product;
+		}
+	}
 
 
 
@@ -126,3 +169,6 @@ class Cart{
 	}
 
 }
+
+
+Cart::load_products();
