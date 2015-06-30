@@ -88,8 +88,8 @@ class Cart{
 
 		$amount = 0;
 
-		foreach($_SESSION[Config::$sitename]['cart'] as $quantity){
-			$amount += $quantity;
+		foreach(self::$products as $product){
+			$amount += $product->quantity;
 		}
 
 		return $amount;
