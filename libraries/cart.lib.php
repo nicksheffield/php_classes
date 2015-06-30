@@ -15,6 +15,7 @@ session_start();
 
 require_once 'config.lib.php';
 require_once 'collection.lib.php';
+require_once 'auth.lib.php';
 
 class Cart{
 	
@@ -36,10 +37,10 @@ class Cart{
 		
 		if(!$id) return;
 
-		if(isset($_SESSION[Config::$sitename]['cart'][$id])){
-			$_SESSION[Config::$sitename]['cart'][$id] += intval($qty);
+		if(isset($_SESSION[Config::$sitename]['cart'][Auth::user_id()][$id])){
+			$_SESSION[Config::$sitename]['cart'][Auth::user_id()][$id] += intval($qty);
 		}else{
-			$_SESSION[Config::$sitename]['cart'][$id] = intval($qty);
+			$_SESSION[Config::$sitename]['cart'][Auth::user_id()][$id] = intval($qty);
 		}
 		
 	}
@@ -54,7 +55,7 @@ class Cart{
 	**/
 	public static function remove_product($id){
 		self::create_cart();
-		unset($_SESSION[Config::$sitename]['cart'][$id]);
+		unset($_SESSION[Config::$sitename]['cart'][Auth::user_id()][$id]);
 	}
 
 
@@ -71,7 +72,7 @@ class Cart{
 		
 		if(!$id) return;
 
-		$_SESSION[Config::$sitename]['cart'][$id] = intval($qty);
+		$_SESSION[Config::$sitename]['cart'][Auth::user_id()][$id] = intval($qty);
 	}
 
 
@@ -102,7 +103,7 @@ class Cart{
 	**/
 	public static function get_cart(){
 		self::create_cart();
-		return $_SESSION[Config::$sitename]['cart'];
+		return $_SESSION[Config::$sitename]['cart'][Auth::user_id()];
 	}
 
 
@@ -112,7 +113,7 @@ class Cart{
 	*
 	**/
 	public static function clear_cart(){
-		$_SESSION[Config::$sitename]['cart'] = array();
+		$_SESSION[Config::$sitename]['cart'][Auth::user_id()] = array();
 	}
 	
 	
@@ -136,7 +137,7 @@ class Cart{
 		}
 		
 		# if there is any products in the cart at all
-		if(self::get_total()){
+		if($_SESSION[Config::$sitename]['cart'][Auth::user_id()]){
 			# then load them all into the collection
 			$col->get();
 		}
@@ -148,7 +149,7 @@ class Cart{
 		foreach($col->items as $product){
 			
 			# add a quantity property to the model
-			$product->quantity = $_SESSION[Config::$sitename]['cart'][$product->id];
+			$product->quantity = $_SESSION[Config::$sitename]['cart'][Auth::user_id()][$product->id];
 			
 			# add the product object into the products array
 			self::$products[] = $product;
@@ -163,8 +164,8 @@ class Cart{
 	*
 	**/
 	private static function create_cart(){
-		if(!isset($_SESSION[Config::$sitename]['cart'])){
-			$_SESSION[Config::$sitename]['cart'] = array();
+		if(!isset($_SESSION[Config::$sitename]['cart'][Auth::user_id()])){
+			$_SESSION[Config::$sitename]['cart'][Auth::user_id()] = array();
 		}
 	}
 
