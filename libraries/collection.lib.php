@@ -91,6 +91,32 @@ class Collection {
 		
 		return $this;
 	}
+
+
+	public function pageCount($perPage){
+
+		$this->db->select('COUNT(id) as count')
+			->where('deleted', '0')
+			->from($this->table);
+
+		$count = $this->db->get_field('count');
+
+		$pages = ceil($count / $perPage);
+
+		return $pages;
+	}
+
+	public function __TOSTRING(){
+		$output = '[';
+
+		$products = '';
+
+		foreach($this->items as $product){
+			$products .= $product.',';
+		}
+
+		return $output . substr($products, 0, -1) . ']';
+	}
 	
 
 }
