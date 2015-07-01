@@ -258,6 +258,12 @@ class Model{
 		}
 	}
 
+
+	public function __TOSTRING(){
+		return json_encode($this->data);
+	}
+
+
 }
 
 
@@ -271,11 +277,5 @@ class Field_Provider {
 		}
 		
 		return self::$tables[$name];
-	}
-
-
-	public function __TOSTRING(){
-		return json_encode($this->data);
-	}
-	
+	}	
 }
