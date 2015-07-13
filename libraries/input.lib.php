@@ -32,3 +32,13 @@ class Input{
 foreach($_POST as $key => $val){
 	Input::set($key, $val);
 }
+
+// http://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
+# POST and PUT from angular. DELETE is empty
+$json = json_decode(file_get_contents("php://input"));
+
+if($json){
+	foreach($json as $key => $val){
+		Input::set($key, $val);
+	}
+}
