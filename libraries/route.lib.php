@@ -49,6 +49,18 @@ class Route {
 		}
 	}
 	
+	public static function put($path, $file){
+		if($_SERVER['REQUEST_METHOD'] == 'PUT'){
+			self::check($path, $file);
+		}
+	}
+	
+	public static function delete($path, $file){
+		if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+			self::check($path, $file);
+		}
+	}
+	
 	private static function check($path, $file){
 		# use QUERY_STRING or default to ''
 		$server_path = $_SERVER['QUERY_STRING'] ?: '/';
@@ -88,6 +100,7 @@ class Route {
 	}
 	
 	public static function fallback($file){
+		http_response_code(404);
 		require_once $file;
 		exit;
 	}
