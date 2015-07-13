@@ -31,7 +31,7 @@ RewriteRule ^(.*)$ index.php?/$1 [L]
 
 class Route {
 	
-	private static $params = [];
+	public static $params = [];
 	
 	public static function param($name){
 		return self::$params[$name];
@@ -91,9 +91,18 @@ class Route {
 			}
 			
 			if($match){
-				# then require the file
-				require_once $file;
-				exit;
+				if(strpos($file, '->') !== false){
+					$path = explode('->', $file);
+					
+					$c = new $path[0]();
+					
+					call_user_func([$c, $path[1]]);
+				} else {
+					# then require the file
+					require_once $file;
+					exit;
+				}
+				
 			}
 			
 		}
