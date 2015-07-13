@@ -363,8 +363,8 @@ class Form {
 	*	
 	*/
 	public static function checkbox($name, $value = '', $checked = false, $extras = []){
-			
-		$extras .= $checked ? ' checked' : '';
+		
+		if($checked) $extras['checked'] = 'checked';
 
 		$html = self::input('checkbox', $name, $value, $extras);
 		return $html;
@@ -385,7 +385,7 @@ class Form {
 	*/
 	public static function radio($name, $value = '', $checked = false, $extras = []){
 			
-		$extras .= $checked ? ' checked' : '';
+		if($checked) $extras['checked'] = 'checked';
 
 		$html = self::input('radio', $name, $value, $extras);
 		return $html;
