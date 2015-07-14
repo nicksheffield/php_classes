@@ -97,6 +97,7 @@ class Route {
 					$c = new $path[0]();
 					
 					call_user_func([$c, $path[1]]);
+					exit;
 				} else {
 					# then require the file
 					require_once $file;
