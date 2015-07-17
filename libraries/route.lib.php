@@ -94,9 +94,13 @@ class Route {
 				if(strpos($file, '->') !== false){
 					$path = explode('->', $file);
 					
+					// constructs an instance of the controller class
 					$c = new $path[0]();
 					
+					// run the function in the controller
 					call_user_func([$c, $path[1]]);
+					
+					// can't believe I forgot to do this.
 					exit;
 				} else {
 					# then require the file

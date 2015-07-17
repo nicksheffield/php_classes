@@ -52,7 +52,7 @@ class Collection {
 	*	@param string $field The field to qualify which records are retrieved
 	*	
 	*/
-	public function get() {
+	public function get($modelType = null) {
 		$this->items = [];
 		
 		$this->db->select('*')->from($this->table);
@@ -60,7 +60,11 @@ class Collection {
 		$this->items = $this->db->get();
 		
 		foreach($this->items as $key => $item){
-			$model = new Model($this->table, false);
+			if(!$modelType){
+				$model = new Model($this->table, false);
+			} else {
+				$model = new $modelType();
+			}
 			
 			$model->fill($item);
 			
