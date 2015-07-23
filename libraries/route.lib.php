@@ -32,6 +32,7 @@ RewriteRule ^(.*)$ index.php?/$1 [L]
 class Route {
 	
 	public static $params = [];
+	public static $iParams = [];
 	
 	public static function param($name){
 		return self::$params[$name];
@@ -82,6 +83,7 @@ class Route {
 				if(substr($path[$key], 0, 1) == ':'){
 					# if it is, then add it to $params
 					self::$params[substr($path[$key], 1)] = $sp_segment;
+					self::$iParams[] = $sp_segment;
 				}else{
 					# if not, then check if the segments are the same
 					if($server_path[$key] != $path[$key]){
@@ -98,7 +100,7 @@ class Route {
 					$c = new $path[0]();
 					
 					// run the function in the controller
-					call_user_func([$c, $path[1]]);
+					call_user_func_array([$c, $path[1]], self::$iParams);
 					
 					// can't believe I forgot to do this.
 					exit;

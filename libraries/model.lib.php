@@ -260,7 +260,13 @@ class Model{
 
 
 	public function __TOSTRING(){
-		return json_encode($this->data);
+		$data = $this->data;
+		
+		foreach($data as $key => $val){
+			$data[$key] = XSS::filter($val);
+		}
+		
+		return json_encode($data);
 	}
 
 
