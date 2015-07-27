@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 3.0
+*	@version 4.0
 *	@author  Nick Sheffield
 *
 */
@@ -65,7 +65,9 @@ class Model{
 	*
 	*/
 	function __get($var){
-		if(isset($this->data[$var])){
+		if($var == 'primary_key'){
+			return $this->primary_key;
+		} else if(isset($this->data[$var])){
 			return XSS::filter($this->data[$var]);
 		}else{
 			return false;
@@ -138,20 +140,28 @@ class Model{
 	*
 	*/
 	public function load($data){
-		
-		$this->db->select('*')->from($this->table);
-		
-		if(is_array($data)){
-			$this->db->where($data);
-		}else{
-			$this->db->where($this->primary_key, $data);
+
+		if(!is_array($data) && Model_Provider::has($this->table, $data)){
+			return Model_Provider::get($this->table, $data);
+		} else {
+			
+			$this->db->select('*')->from($this->table);
+			
+			if(is_array($data)){
+				$this->db->where($data);
+			}else{
+				$this->db->where($this->primary_key, $data);
+			}
+			
+			$result = $this->db->get_one();
+
+			$this->data = $result;
+			
+			Model_Provider::set($this->table, $this);
+			
+			return $this;
 		}
 		
-		$result = $this->db->get_one();
-
-		$this->data = $result;
-		
-		return $this;
 	}
 
 	/**
@@ -178,6 +188,8 @@ class Model{
 		}else{
 			$this->data = $data;
 		}
+		
+		Model_Provider::set($this->table, $this);
 
 		return $this;
 	}
@@ -257,6 +269,47 @@ class Model{
 			return false;
 		}
 	}
+	
+	
+	
+	public function hasOne($model, $primary_key, $foreign_key){
+		
+		$m = new $model();
+		
+		$id = $this->primary_key;
+		
+		$m->load([$this->foreign_key, $this->$id]);
+		
+		return $m;
+	}
+	
+	public function belongsTo($model, $foreign_key){
+		
+		$m = new $model();
+		
+		$m->load($this->$foreign_key);
+		
+		return $m;
+	}
+	
+	public function hasMany($collection, $foreign_key = null, $where = []){
+		
+		// should check if it is a collection using is_a() or is_subclass_of()
+		
+		$c = new $collection();
+		
+		if(is_null($foreign)){
+			$foreign = strToLower($collection) + '_id';
+		}
+		
+		$id = $this->primary_key;
+		
+		$c->where($foreign_key, $this->$id);
+		
+		$c->get();
+		
+		return $c->items;
+	}
 
 
 	public function __TOSTRING(){
@@ -267,6 +320,10 @@ class Model{
 		}
 		
 		return json_encode($data);
+	}
+	
+	public function to_array(){
+		return $this->data;
 	}
 
 
@@ -284,4 +341,23 @@ class Field_Provider {
 		
 		return self::$tables[$name];
 	}	
+}
+
+class Model_Provider {
+	
+	private static $models = [];
+	
+	public static function set($model_name, $model){
+		$id = $model->primary_key;
+		self::$models[$model_name][$model->$id] = $model;
+	}
+	
+	public static function has($model_name, $id){
+		return isset(self::$models[$model_name][$id]);
+	}
+	
+	public static function get($mode_name, $key){
+		return self::$models[$model_name][$key];
+	}
+	
 }
