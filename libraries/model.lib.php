@@ -6,7 +6,7 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 4.0
+*	@version 3.0
 *	@author  Nick Sheffield
 *
 */
@@ -15,13 +15,13 @@ require_once 'config.lib.php';
 require_once 'database.lib.php';
 require_once 'xss.lib.php';
 
-class Model{
+class Model {
 
 	protected $fields        = array();
 	protected $data          = array();
 	protected $db            = null;
-	protected $primary_key   = 'id';
-	protected $table         = '';
+	public    $primary_key   = 'id';
+	public    $table         = '';
 	protected $check_fields  = true;
 
 	/**
@@ -141,15 +141,19 @@ class Model{
 	*/
 	public function load($data){
 
-		if(!is_array($data) && Model_Provider::has($this->table, $data)){
-			return Model_Provider::get($this->table, $data);
+		if (!is_array($data) && Model_Provider::has($this->table, $data)) {
+			$d = Model_Provider::get($this->table, $data);
+			
+			$this->fill($d->to_array());
+			
+			return $d;
 		} else {
 			
 			$this->db->select('*')->from($this->table);
 			
-			if(is_array($data)){
+			if (is_array($data)) {
 				$this->db->where($data);
-			}else{
+			} else {
 				$this->db->where($this->primary_key, $data);
 			}
 			
@@ -271,42 +275,24 @@ class Model{
 	}
 	
 	
-	
-	public function hasOne($model, $primary_key, $foreign_key){
-		
+	public function hasOne($model, $local_key, $foreign_key){
 		$m = new $model();
 		
-		$id = $this->primary_key;
-		
-		$m->load([$this->foreign_key, $this->$id]);
+		$m->load([$foreign_key => $this->$local_key]);
 		
 		return $m;
 	}
 	
-	public function belongsTo($model, $foreign_key){
-		
-		$m = new $model();
-		
-		$m->load($this->$foreign_key);
-		
-		return $m;
-	}
 	
-	public function hasMany($collection, $foreign_key = null, $where = []){
-		
-		// should check if it is a collection using is_a() or is_subclass_of()
-		
-		$c = new $collection();
-		
-		if(is_null($foreign)){
-			$foreign = strToLower($collection) + '_id';
-		}
+	public function hasMany($model, $foreign_key = null, $where = []){
+		$c = new Collection();
 		
 		$id = $this->primary_key;
 		
 		$c->where($foreign_key, $this->$id);
+		$c->where($where);
 		
-		$c->get();
+		$c->get($model);
 		
 		return $c->items;
 	}
@@ -314,6 +300,10 @@ class Model{
 
 	public function __TOSTRING(){
 		$data = $this->data;
+		
+		if(!$data){
+			$data = [];
+		}
 		
 		foreach($data as $key => $val){
 			$data[$key] = XSS::filter($val);
@@ -356,7 +346,7 @@ class Model_Provider {
 		return isset(self::$models[$model_name][$id]);
 	}
 	
-	public static function get($mode_name, $key){
+	public static function get($model_name, $key){
 		return self::$models[$model_name][$key];
 	}
 	
