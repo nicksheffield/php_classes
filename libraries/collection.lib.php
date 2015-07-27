@@ -22,6 +22,7 @@ class Collection {
 	public     $items  = array();
 	protected  $db     = null;
 	protected  $table  = '';
+	protected  $model  = null;
 
 	/**
 	*
@@ -60,10 +61,12 @@ class Collection {
 		$this->items = $this->db->get();
 		
 		foreach($this->items as $key => $item){
-			if(!$modelType){
-				$model = new Model($this->table, false);
-			} else {
+			if(!is_null($modelType)){
 				$model = new $modelType();
+			} else if(!is_null($this->model)){
+				$model = new $this->model();
+			} else {
+				$model = new Model($this->table, false);
 			}
 			
 			$model->fill($item);
