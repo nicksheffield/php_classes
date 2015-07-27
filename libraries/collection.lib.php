@@ -20,9 +20,9 @@ require_once 'model.lib.php';
 class Collection {
 
 	public     $items  = array();
+	public     $table  = '';
+	public     $model  = null;
 	protected  $db     = null;
-	protected  $table  = '';
-	protected  $model  = null;
 
 	/**
 	*
@@ -54,6 +54,14 @@ class Collection {
 	*	
 	*/
 	public function get($modelType = null) {
+		if(!is_null($modelType)){
+			$m = new $modelType();
+			$this->table = $m->table;
+		} else if(!is_null($this->model)){
+			$m = new $this->model();
+			$this->table = $m->table;
+		}
+		
 		$this->items = [];
 		
 		$this->db->select('*')->from($this->table);
