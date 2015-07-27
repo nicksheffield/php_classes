@@ -364,7 +364,7 @@ class Database{
 
 
 
-	private function reset(){
+	public function reset(){
 		$this->select = '';
 		$this->from   = '';
 		$this->where  = '';
