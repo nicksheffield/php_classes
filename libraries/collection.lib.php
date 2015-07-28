@@ -65,21 +65,29 @@ class Collection {
 		$this->items = [];
 		
 		$this->db->select('*')->from($this->table);
-
-		$this->items = $this->db->get();
 		
-		foreach($this->items as $key => $item){
-			if(!is_null($modelType)){
-				$model = new $modelType();
-			} else if(!is_null($this->model)){
-				$model = new $this->model();
-			} else {
-				$model = new Model($this->table, false);
+		$q = $this->db->build_query();
+		
+		if(Model_Provider::has($q)){
+			$this->items = Model_Provider::get($q);
+		}else{
+			$this->items = $this->db->get();
+			
+			foreach($this->items as $key => $item){
+				if(!is_null($modelType)){
+					$model = new $modelType();
+				} else if(!is_null($this->model)){
+					$model = new $this->model();
+				} else {
+					$model = new Model($this->table, false);
+				}
+				
+				$model->fill($item);
+				
+				$this->items[$key] = $model;
 			}
 			
-			$model->fill($item);
-			
-			$this->items[$key] = $model;
+			Model_Provider::set($q, $this->items);
 		}
 	}
 	

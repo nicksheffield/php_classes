@@ -157,16 +157,25 @@ class Database{
 		return $this;
 	}
 	
-
-
-
-
-	public function get(){
+	
+	
+	
+	public function build_query(){
 		$q  = $this->select;
 		$q .= $this->from;
 		$q .= $this->where;
 		$q .= $this->order;
 		$q .= $this->limit;
+		
+		return $q;
+	}
+	
+
+
+
+
+	public function get(){
+		$q = $this->build_query();
 
 		$this->reset();
 
@@ -395,6 +404,7 @@ class Database{
 		$result = $this->connection->query($query);
 
 		$this->last_query = $query;
+		// echo "<div class='alert alert-info'>$query</div>";
 
 		if(!$result) $this->report_query_error($query, true);
 

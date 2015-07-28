@@ -140,32 +140,34 @@ class Model {
 	*
 	*/
 	public function load($data){
-
-		if (!is_array($data) && Model_Provider::has($this->table, $data)) {
-			$d = Model_Provider::get($this->table, $data);
 			
-			$this->fill($d->to_array());
-			
-			return $d;
+		$this->db->select('*')->from($this->table);
+		
+		if (is_array($data)) {
+			$this->db->where($data);
 		} else {
+			$this->db->where($this->primary_key, $data);
+		}
+		
+		$q = $this->db->build_query();
+		
+		if (Model_Provider::has($q)) {
+			$this->db->reset();
 			
-			$this->db->select('*')->from($this->table);
+			$obj = Model_Provider::get($q);
 			
-			if (is_array($data)) {
-				$this->db->where($data);
-			} else {
-				$this->db->where($this->primary_key, $data);
-			}
+			$this->fill($obj->to_array());
 			
+			return $obj;
+		} else {
 			$result = $this->db->get_one();
 
 			$this->data = $result;
 			
-			Model_Provider::set($this->table, $this);
+			Model_Provider::set($this->db->last_query, $this);
 			
 			return $this;
 		}
-		
 	}
 
 	/**
@@ -192,8 +194,6 @@ class Model {
 		}else{
 			$this->data = $data;
 		}
-		
-		Model_Provider::set($this->table, $this);
 
 		return $this;
 	}
@@ -275,10 +275,36 @@ class Model {
 	}
 	
 	
-	public function hasOne($model, $local_key, $foreign_key){
+	public function hasOne($model, $foreign_key = null, $local_key = null){
 		$m = new $model();
 		
+		# assume the local_key
+		if(is_null($foreign_key)){
+			$foreign_key = strtolower(get_class($this)).'_id';
+		}
+		
+		if(is_null($local_key)){
+			$local_key = $m->primary_key;
+		}
+		
 		$m->load([$foreign_key => $this->$local_key]);
+		
+		return $m;
+	}
+	
+
+	public function belongsTo($model, $local_key = null, $parent_key = null){
+		$m = new $model();
+		
+		if(is_null($parent_key)){
+			$parent_key = strtolower($model).'_id';
+		}
+		
+		if(is_null($local_key)){
+			$local_key = $m->primary_key;
+		}
+		
+		$m->load([$local_key => $this->$parent_key]);
 		
 		return $m;
 	}
@@ -286,6 +312,10 @@ class Model {
 	
 	public function hasMany($model, $foreign_key = null, $where = []){
 		$c = new Collection();
+		
+		if(is_null($foreign_key)){
+			$foreign_key = strtolower($model)+'_id';
+		}
 		
 		$id = $this->primary_key;
 		
@@ -298,7 +328,7 @@ class Model {
 	}
 
 
-	public function __TOSTRING(){
+	public function to_array(){
 		$data = $this->data;
 		
 		if(!$data){
@@ -309,11 +339,15 @@ class Model {
 			$data[$key] = XSS::filter($val);
 		}
 		
-		return json_encode($data);
+		return $this->data;
 	}
 	
-	public function to_array(){
-		return $this->data;
+	public function __TOSTRING(){
+		return json_encode($this->to_array());
+	}
+	
+	public function to_json(){
+		return $this->__TOSTRING();
 	}
 
 
@@ -335,19 +369,18 @@ class Field_Provider {
 
 class Model_Provider {
 	
-	private static $models = [];
+	private static $queries = [];
 	
-	public static function set($model_name, $model){
-		$id = $model->primary_key;
-		self::$models[$model_name][$model->$id] = $model;
+	public static function set($query, $data){
+		self::$queries[$query] = $data;
 	}
 	
-	public static function has($model_name, $id){
-		return isset(self::$models[$model_name][$id]);
+	public static function has($query){
+		return isset(self::$queries[$query]);
 	}
 	
-	public static function get($model_name, $key){
-		return self::$models[$model_name][$key];
+	public static function get($query){
+		return self::$queries[$query];
 	}
 	
 }
