@@ -14,6 +14,7 @@
 require_once 'config.lib.php';
 require_once 'database.lib.php';
 require_once 'xss.lib.php';
+require_once 'collection.lib.php';
 
 class Model {
 
@@ -65,9 +66,9 @@ class Model {
 	*
 	*/
 	function __get($var){
-		if($var == 'primary_key'){
-			return $this->primary_key;
-		} else if(isset($this->data[$var])){
+		if(method_exists($this, $var)){
+			return $this->$var();
+		}else if(isset($this->data[$var])){
 			return XSS::filter($this->data[$var]);
 		}else{
 			return false;
@@ -155,6 +156,7 @@ class Model {
 			$this->db->reset();
 			
 			$obj = Model_Provider::get($q);
+			// echo "<div class='alert alert-success'>$q</div>";
 			
 			$this->fill($obj->to_array());
 			
@@ -327,8 +329,7 @@ class Model {
 		return $c->items;
 	}
 	
-
-	public function belongsToMany($model, $join_table, $this_id = null, $that_id = null){
+	public function belongsToMany($model, $join_table, $this_id = null, $that_id = null, $where = []){
 		
 		$m = new $model();
 		
@@ -348,15 +349,18 @@ class Model {
 			$fields[] = $m->table.'.'.$field;
 		}
 		
-		$this->db->select(implode(',', $fields))
-			->from($join_table.', '.$m->table.','.$this->table)
+		$this->db
+			->select(implode(', ', $fields))
+			->from(implode(', ', [$join_table, $m->table, $this->table]))
 			->where($m->table.'.'.$m->primary_key, $join_table.'.'.$that_id, false)
 			->where($this->table.'.'.$this->primary_key, $join_table.'.'.$this_id, false)
-			->where($this->table.'.'.$this->primary_key, $this->$id);
+			->where($this->table.'.'.$this->primary_key, $this->$id)
+			->where($where);
 			
 		$q = $this->db->build_query();
 		
 		if(Model_Provider::has($q)){
+			// echo "<div class='alert alert-success'>$q</div>";
 			return Model_Provider::get($q);
 		} else {
 			$results = $this->db->get();
