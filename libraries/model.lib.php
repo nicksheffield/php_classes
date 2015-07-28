@@ -17,11 +17,11 @@ require_once 'xss.lib.php';
 
 class Model {
 
-	protected $fields        = array();
-	protected $data          = array();
-	protected $db            = null;
+	public    $fields        = array();
 	public    $primary_key   = 'id';
 	public    $table         = '';
+	protected $data          = array();
+	protected $db            = null;
 	protected $check_fields  = true;
 
 	/**
@@ -325,6 +325,57 @@ class Model {
 		$c->get($model);
 		
 		return $c->items;
+	}
+	
+
+	public function belongsToMany($model, $join_table, $this_id = null, $that_id = null){
+		
+		$m = new $model();
+		
+		if(is_null($this_id)){
+			$this_id = strtolower(get_class($this)).'_id';
+		}
+		
+		if(is_null($that_id)){
+			$that_id = strtolower($model).'_id';
+		}
+		
+		$id = $this->primary_key;
+		
+		$fields = [];
+		
+		foreach($m->fields as $field){
+			$fields[] = $m->table.'.'.$field;
+		}
+		
+		$this->db->select(implode(',', $fields))
+			->from($join_table.', '.$m->table.','.$this->table)
+			->where($m->table.'.'.$m->primary_key, $join_table.'.'.$that_id, false)
+			->where($this->table.'.'.$this->primary_key, $join_table.'.'.$this_id, false)
+			->where($this->table.'.'.$this->primary_key, $this->$id);
+			
+		$q = $this->db->build_query();
+		
+		if(Model_Provider::has($q)){
+			return Model_Provider::get($q);
+		} else {
+			$results = $this->db->get();
+			$items = [];
+			
+			foreach($results as $result){
+				$m = new $model();
+				
+				$m->fill($result);
+				
+				$items[] = $m;
+			}
+			
+			Model_Provider::set($q, $items);
+			
+			return $items;
+		}
+		
+		
 	}
 
 
