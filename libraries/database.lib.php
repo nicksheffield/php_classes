@@ -436,12 +436,21 @@ class Database{
 				">
 					<b>There is something wrong with this query: </b>
 					<br>
-					<span style="font-size: 1.2em;">'.$query.'</span>
+					<pre><code style="font-size: 1.2em;" class="sql">'.$query.'</code></pre>
 					<hr>
 					<b>Error message:</b>
 					<br>
 					'.$this->connection->error.'
 				</div>
+				<style scoped>
+					pre { padding: 0.5em 1em; background: #fff; }
+					.hljs-keyword { color: orange; }
+					.hljs-built_in { color: dodgerblue; }
+				</style>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+				<script>
+				hljs.initHighlightingOnLoad();
+				</script>
 			';
 			
 			if($exit) exit;
