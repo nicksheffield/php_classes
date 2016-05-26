@@ -448,9 +448,7 @@ class Database{
 					.hljs-built_in { color: dodgerblue; }
 				</style>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
-				<script>
-				hljs.initHighlightingOnLoad();
-				</script>
+				<script>hljs.initHighlightingOnLoad()</script>
 			';
 			
 			if($exit) exit;
