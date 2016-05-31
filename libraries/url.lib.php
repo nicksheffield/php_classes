@@ -37,3 +37,14 @@ class URL{
 	}
 
 }
+
+function url($url) {
+	$base = str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']);
+	$base = str_replace('index.php', '', $base);
+
+	if(strpos('/', $url) === 0) {
+		$url = substr($url, 1);
+	}
+
+	return $base.$url;
+}
