@@ -22,7 +22,7 @@ class Form {
 	*/
 	public static function open($action = '', $method = 'post', $extras = []){
 		$attrs = self::make_attrs(array_merge([
-			'action' => $action,
+			'action' => url($action),
 			'method' => $method
 		], $extras));
 
