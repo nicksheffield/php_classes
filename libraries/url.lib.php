@@ -32,7 +32,7 @@ class URL{
 	 * @param $url string The url or file to redirect to.
 	 */
 	public static function redirect($url){
-		header('location: '.$url);
+		header('location: '.url($url));
 		exit;
 	}
 
