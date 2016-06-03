@@ -93,7 +93,7 @@ class Auth{
 }
 
 
-if(Config::$auth_table && Auth::is_logged_in()){
+if(Config::$auth_table && Auth::is_logged_in() && Config::$database['database']){
 	Auth::$user = new Model(Config::$auth_table);
 	Auth::$user->load(Auth::user_id());
 }
