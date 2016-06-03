@@ -36,6 +36,10 @@ class URL{
 		exit;
 	}
 
+	public static function current() {
+		return $_SERVER['QUERY_STRING'] ?: '/';
+	}
+
 }
 
 function url($url) {
