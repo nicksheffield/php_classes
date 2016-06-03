@@ -171,5 +171,6 @@ class Cart{
 
 }
 
-
-Cart::load_products();
+if(Config::$database['database']){
+	Cart::load_products();
+}
