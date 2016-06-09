@@ -4,7 +4,7 @@
 *	
 *	File Upload class
 *
-*	@version 1.1
+*	@version 1.2
 *	@author  Nick Sheffield
 *
 *	@todo    Finish docblocks
@@ -24,6 +24,8 @@
 *	}
 *
 */
+
+namespace App;
 
 class Upload{
 

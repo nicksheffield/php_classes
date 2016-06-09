@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 require_once 'input.lib.php';
 
 class Sticky{

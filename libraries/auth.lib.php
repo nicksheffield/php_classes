@@ -3,16 +3,20 @@
 /**
 *	Authentication class
 *
-*	@version 2.0
+*	@version 2.1
 *	@author  Nick Sheffield
 *
 */
+
+namespace App;
 
 session_start();
 
 require_once 'url.lib.php';
 require_once 'config.lib.php';
 require_once 'model.lib.php';
+
+use App\Model\Model;
 
 class Auth{
 	

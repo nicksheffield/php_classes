@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 session_start();
 
 require_once 'config.lib.php';

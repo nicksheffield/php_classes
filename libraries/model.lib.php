@@ -6,15 +6,21 @@
 *
 *	@uses Config, for db details. Database, for db connection
 *
-*	@version 3.1
+*	@version 3.0
 *	@author  Nick Sheffield
 *
 */
+
+namespace App\Model;
 
 require_once 'config.lib.php';
 require_once 'database.lib.php';
 require_once 'xss.lib.php';
 require_once 'collection.lib.php';
+
+use App\Database;
+use App\Config;
+use App\XSS;
 
 class Model {
 
@@ -158,11 +164,7 @@ class Model {
 			$obj = Model_Provider::get($q);
 			// echo "<div class='alert alert-success'>$q</div>";
 			
-			if(is_array($obj)) {
-				$this->fill($obj[0]->to_array());
-			} else {
-				$this->fill($obj->to_array());
-			}
+			$this->fill($obj->to_array());
 			
 			return $obj;
 		} else {
@@ -428,7 +430,7 @@ class Field_Provider {
 
 class Model_Provider {
 	
-	public static $queries = [];
+	private static $queries = [];
 	
 	public static function set($query, $data){
 		self::$queries[$query] = $data;
