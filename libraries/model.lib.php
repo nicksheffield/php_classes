@@ -327,6 +327,7 @@ class Model {
 		
 		$c->where($foreign_key, $this->$id);
 		$c->where($where);
+		$c->order_by('id');
 		
 		$c->get($model);
 		
