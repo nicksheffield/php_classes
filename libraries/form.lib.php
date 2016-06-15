@@ -8,6 +8,8 @@
 *
 */
 
+namespace App;
+
 class Form {
 
 	/**

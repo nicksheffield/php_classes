@@ -8,14 +8,19 @@
 *			Database, for db connection.
 *			Model,    for containing records.
 *
-*	@version 2.0
+*	@version 2.1
 *	@author  Nick Sheffield
 *
 */
 
+namespace App\Model;
+
 require_once 'config.lib.php';
 require_once 'database.lib.php';
 require_once 'model.lib.php';
+
+use App\Database;
+use App\Config;
 
 class Collection {
 

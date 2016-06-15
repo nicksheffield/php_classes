@@ -29,6 +29,8 @@ RewriteRule ^(.*)$ index.php?/$1 [L]
 
 */
 
+ob_start();
+
 class Route {
 	
 	public static $params = [];
@@ -102,10 +104,13 @@ class Route {
 					// run the function in the controller
 					call_user_func_array([$c, $path[1]], self::$iParams);
 					
+					ob_end_flush();
+					
 					// can't believe I forgot to do this.
 					exit;
 				} else {
 					# then require the file
+					ob_end_flush();
 					require_once $file;
 					exit;
 				}

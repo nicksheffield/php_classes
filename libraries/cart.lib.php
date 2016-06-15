@@ -6,16 +6,20 @@
 *	
 *	Used in static context.
 *
-*	@version 1.2
+*	@version 1.3
 *	@author Nick Sheffield
 *
 */
+
+namespace App;
 
 session_start();
 
 require_once 'config.lib.php';
 require_once 'collection.lib.php';
 require_once 'auth.lib.php';
+
+use App\Model\Collection;
 
 class Cart{
 	

@@ -1,14 +1,21 @@
 <?php
 
 /**
-*	Config info class
+*	Config
 *
-*	@version 2.0
+*	@version 2.1
 *	@author  Nick Sheffield
 *
 */
 
-class Config{
+namespace App;
+
+class Config {
+	
+	# This variable is used to separate your Authentication 
+	# and Cart data in the session, per site.
+	public static $sitename = 'default';
+
 
 	# Database connection credentials.
 	# Hostname should almost always be set to 'localhost'.
@@ -30,10 +37,5 @@ class Config{
 	# products in the cart as models.
 	# Leave blank or comment out to disable this feature.
 	public static $cart_table = 'products';
-	
-	
-	# This variable is used to separate your Authentication 
-	# and Cart data in the session, per site.
-	public static $sitename = 'default';
 
 }

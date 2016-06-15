@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 class Database{
 
 	
@@ -24,7 +26,7 @@ class Database{
 
 	public function __construct($credentials){
 
-		$this->connection = new mysqli(
+		$this->connection = new \mysqli(
 			$credentials['hostname'],
 			$credentials['username'],
 			$credentials['password'],

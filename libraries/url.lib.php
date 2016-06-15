@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 session_start();
 
 class URL{
